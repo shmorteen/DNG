@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Public Services Infrastructure Map</title>
+    <title>Healthcare Infrastructure Map</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
@@ -38,11 +38,11 @@
             font-size: 12px;
             border-radius: 3px;
             position: absolute;
-            bottom: 30px;
+            bottom: 100px;
             left: 10px;
             z-index: 1;
-            max-height: 50%; /* Limit the height for mobile */
-            overflow-y: auto; /* Scroll if content is too tall */
+            max-height: 50%;
+            overflow-y: auto;
         }
 
         .legend div {
@@ -71,17 +71,17 @@
             .nav-item {
                 margin-right: 5px;
                 margin-bottom: 5px;
-                font-size: 14px; /* Smaller font size for mobile */
+                font-size: 14px;
             }
 
             .legend {
                 bottom: 10px;
                 left: 10px;
-                font-size: 10px; /* Smaller font size for mobile */
+                font-size: 10px;
             }
 
             .navbar-brand {
-                height: 30px; /* Adjust brand image size */
+                height: 30px;
             }
         }
     </style>
@@ -89,7 +89,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg" style="background-color: #119A5C;">
-        <img class="navbar-brand mb-lg-2" src="https://digitalnigeria.gov.ng/wp-content/uploads/2023/10/logo-2048x1457.png"
+        <img class="navbar-brand" src="https://digitalnigeria.gov.ng/wp-content/uploads/2023/10/logo-2048x1457.png"
             style="padding:3px; border-radius: 5px; border:2px solid white;height: 40px; width: auto;">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,12 +101,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="index.html">Home</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="healthcare.html" href="#">Healthcare</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="education.html">Education</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="utilities.html">Utilities</a>
                 </li>
@@ -116,8 +110,26 @@
             </ul>
         </div>
     </nav>
+
     <div id="map"></div>
     <div id="legend" class="legend"></div>
+
+    <div id="filter" class="filter-container" style="position: absolute; top: 80px; left: 10px; z-index: 2; background: white; padding: 10px; border-radius: 5px;">
+        <h5>Filter Infrastructure</h5>
+        <div>
+            <input type="checkbox" id="fire-stations" checked>
+            <label for="fire-stations">Fire Stations</label>
+        </div>
+        <div>
+            <input type="checkbox" id="police-stations" checked>
+            <label for="police-stations">Police Stations</label>
+        </div>
+        <div>
+            <input type="checkbox" id="post-offices" checked>
+            <label for="post-offices">Post Offices</label>
+        </div>
+    </div>
+
 
     <script>
         mapboxgl.accessToken = 'pk.eyJ1Ijoic2htb3J0ZWVuIiwiYSI6ImNtMTQ5d2h1dzFicm0ya3NjODBwd3phbWgifQ.WsGwh7Mrr7X-xf751eEHFw';
@@ -48328,6 +48340,34 @@
             map.setPaintProperty(layerId, 'fill-opacity', 0.6); // Reset opacity
         });
     });
+
+    function toggleLayer(layerId, visibility) {
+            map.setLayoutProperty(layerId, 'visibility', visibility);
+        }
+
+        // Event listeners for checkboxes
+        document.getElementById('fire-stations').addEventListener('change', (e) => {
+            toggleLayer('Fire Stations-points', e.target.checked ? 'visible' : 'none');
+        });
+
+        document.getElementById('police-stations').addEventListener('change', (e) => {
+            toggleLayer('Police Stations-points', e.target.checked ? 'visible' : 'none');
+        });
+
+        document.getElementById('post-offices').addEventListener('change', (e) => {
+            toggleLayer('Post Offices-points', e.target.checked ? 'visible' : 'none');
+        });
+
+        // Load map and add data
+        map.on('load', () => {
+            addLGABoundaries(lgaBoundariesGeoJSON);
+
+            Object.keys(publicInfrastructureData).forEach(type => {
+                addInfrastructureLayer(type, publicInfrastructureData[type]);
+            });
+
+            addLegend();
+        });
     </script>
     <script src="https://unpkg.com/@turf/turf@^7/turf.min.js"></script>
 </body>
