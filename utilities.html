@@ -3,68 +3,93 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Utilities Infrastructure Map</title>
+    <title>Healthcare Infrastructure Map</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-        <style>
-            body,
-            html {
-                margin: 0;
-                padding: 0;
-                height: 100%;
-            }
-    
-            #map {
-                position: absolute;
-                top: 56px;
-                bottom: 0;
-                width: 100%;
-            }
-    
-            .navbar {
-                position: fixed;
-                top: 0;
-                width: 100%;
-            }
-    
-            .legend {
-                background: white;
-                padding: 10px;
-                font-size: 12px;
-                border-radius: 3px;
-                position: absolute;
-                bottom: 30px;
-                left: 10px;
-                z-index: 1;
-            }
-    
-            .legend div {
-                display: flex;
-                align-items: center;
-                margin-bottom: 5px;
-            }
-    
-            .legend div span {
-                height: 12px;
-                width: 12px;
-                border-radius: 50%;
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        #map {
+            position: absolute;
+            top: 56px;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .legend {
+            background: white;
+            padding: 10px;
+            font-size: 12px;
+            border-radius: 3px;
+            position: absolute;
+            bottom: 30px;
+            left: 10px;
+            z-index: 1;
+            max-height: 50%; /* Limit the height for mobile */
+            overflow-y: auto; /* Scroll if content is too tall */
+        }
+
+        .legend div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .legend div span {
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .nav-item {
+            border: 2px solid white;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-item {
                 margin-right: 5px;
+                margin-bottom: 5px;
+                font-size: 14px; /* Smaller font size for mobile */
             }
 
-            .nav-item {
-            border: 2px solid white;
-            margin-right: 50px;
-            border-radius: 10px;
+            .legend {
+                bottom: 10px;
+                left: 10px;
+                font-size: 10px; /* Smaller font size for mobile */
+            }
+
+            .navbar-brand {
+                height: 30px; /* Adjust brand image size */
+            }
         }
-        </style>
+    </style>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg" style="background-color: #119A5C;">
-        <img class="navbar-brand" src="https://digitalnigeria.gov.ng/wp-content/uploads/2023/10/logo-2048x1457.png"
+        <img class="navbar-brand mb-lg-2" src="https://digitalnigeria.gov.ng/wp-content/uploads/2023/10/logo-2048x1457.png"
             style="padding:3px; border-radius: 5px; border:2px solid white;height: 40px; width: auto;">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,7 +111,7 @@
                     <a class="nav-link" href="utilities.html">Utilities</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="public.html">Public Services</a>
+                    <a class="nav-link" href="public-services.html">Public Services</a>
                 </li>
             </ul>
         </div>
@@ -49635,55 +49660,56 @@
     }
 
     function addInfrastructureLayer(type, geojson) {
-        map.addSource(type, {
-            'type': 'geojson',
-            'data': geojson
+    map.addSource(type, {
+        'type': 'geojson',
+        'data': geojson
+    });
+
+    map.addLayer({
+        'id': type + '-points',
+        'type': 'circle',
+        'source': type,
+        'layout': {},
+        'paint': {
+            'circle-color': infrastructureColorMapping[type],
+            'circle-radius': 5,
+            'circle-opacity': 1
+        }
+    });
+
+    // Click event for infrastructure points
+    map.on('click', type + '-points', function (e) {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.name || e.features[0].properties.amenity || 'No Description Available'; // Update fallback logic
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+        new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(map);
+    });
+
+    // Hover event for infrastructure points
+    map.on('mouseenter', type + '-points', function (e) {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.name || e.features[0].properties.amenity || 'No Description Available'; // Update fallback logic
+        const popup = new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(map);
+
+        // Change the cursor style
+        map.getCanvas().style.cursor = 'pointer';
+
+        // Remove popup on mouse leave
+        map.on('mouseleave', type + '-points', function () {
+            popup.remove();
+            map.getCanvas().style.cursor = ''; // Reset cursor
         });
+    });
+}
 
-        map.addLayer({
-            'id': type + '-points',
-            'type': 'circle',
-            'source': type,
-            'layout': {},
-            'paint': {
-                'circle-color': infrastructureColorMapping[type],
-                'circle-radius': 5,
-                'circle-opacity': 1
-            }
-        });
-
-        // Click event for infrastructure points
-        map.on('click', type + '-points', function (e) {
-            const coordinates = e.features[0].geometry.coordinates.slice();
-            const description = e.features[0].properties.name || 'No Name';
-            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-            }
-            new mapboxgl.Popup()
-                .setLngLat(coordinates)
-                .setHTML(description)
-                .addTo(map);
-        });
-
-        // Hover event for infrastructure points
-        map.on('mouseenter', type + '-points', function (e) {
-            const coordinates = e.features[0].geometry.coordinates.slice();
-            const description = e.features[0].properties.name || 'No Name';
-            const popup = new mapboxgl.Popup()
-                .setLngLat(coordinates)
-                .setHTML(description)
-                .addTo(map);
-
-            // Change the cursor style
-            map.getCanvas().style.cursor = 'pointer';
-
-            // Remove popup on mouse leave
-            map.on('mouseleave', type + '-points', function () {
-                popup.remove();
-                map.getCanvas().style.cursor = ''; // Reset cursor
-            });
-        });
-    }
 
     function addLegend() {
         const legend = document.getElementById('legend');
@@ -49757,7 +49783,7 @@
             // Zoom into the clicked LGA
             map.flyTo({
                 center: coordinates,
-                zoom: 10, // Adjust the zoom level as needed
+                zoom: 11, // Adjust the zoom level as needed
                 essential: true // This animation is considered essential with respect to prefers-reduced-motion
             });
 
