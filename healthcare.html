@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Digital Infrastructure Map</title>
+    <title>Healthcare Infrastructure Map</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
@@ -101,11 +101,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="index.html">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="education.html">School</a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="healthcare.html" href="#">Healthcare</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="healthcare.html">Healthcare</a>
+                    <a class="nav-link" href="education.html">Education</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="utilities.html">Utilities</a>
@@ -120,27 +120,25 @@
     <div id="legend" class="legend"></div>
 
 
-    <!-- Mapbox script -->
     <script>
         mapboxgl.accessToken = 'pk.eyJ1Ijoic2htb3J0ZWVuIiwiYSI6ImNtMTQ5d2h1dzFicm0ya3NjODBwd3phbWgifQ.WsGwh7Mrr7X-xf751eEHFw';
 
         const map = new mapboxgl.Map({
-            container: 'map', // container ID
-            style: 'mapbox://styles/mapbox/streets-v11', // map style
-            center: [3.93125, 7.85257], // [lng, lat] coordinates for the map center
-            zoom: 7.2 // starting zoom level
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [3.93125, 7.85257],
+            zoom: 7.2
         });
 
-        // Add zoom and rotation controls
         map.addControl(new mapboxgl.NavigationControl());
-
-        // Add geolocation control to the map
         map.addControl(new mapboxgl.GeolocateControl({
             positionOptions: { enableHighAccuracy: true },
             trackUserLocation: true
         }));
 
-        var geojsonData =
+
+        // Define LGA boundaries GeoJSON data
+        const lgaBoundariesGeoJSON =
         {
             "type": "FeatureCollection",
             "generator": "overpass-turbo",
@@ -47637,171 +47635,4127 @@
                     "id": "node/2163706717"
                 }
             ]
-        }
+        };
 
-        map.on('load', function () {
-    // Filter to get only LGA boundaries
-    const lgaBoundaries = {
-        "type": "FeatureCollection",
-        "features": geojsonData.features.filter(feature =>
-            feature.properties.admin_level === "6" &&
-            feature.properties.boundary === "administrative" &&
-            feature.properties.type === "boundary" &&
-            feature.geometry.type === "Polygon"
-        )
-    };
+        // Define healthcare infrastructure data
+        const healthInfrastructureData = {
+            'Hospitals': {
+                "type": "FeatureCollection",
+                "generator": "overpass-turbo",
+                "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+                "timestamp": "2024-09-24T21:29:00Z",
+                "features": [
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/82467201",
+                            "amenity": "hospital",
+                            "emergency": "yes",
+                            "healthcare": "hospital",
+                            "name": "University College Hospital (UCH)",
+                            "website": "https://uch-ibadan.org.ng/",
+                            "wikidata": "Q7894624",
+                            "wikipedia": "en:University College Hospital, Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9099833,
+                                        7.4026573
+                                    ],
+                                    [
+                                        3.9043828,
+                                        7.4064236
+                                    ],
+                                    [
+                                        3.9017435,
+                                        7.4061044
+                                    ],
+                                    [
+                                        3.9008209,
+                                        7.4059555
+                                    ],
+                                    [
+                                        3.9004561,
+                                        7.4057639
+                                    ],
+                                    [
+                                        3.8997909,
+                                        7.4053597
+                                    ],
+                                    [
+                                        3.8977953,
+                                        7.4029977
+                                    ],
+                                    [
+                                        3.8975378,
+                                        7.4025934
+                                    ],
+                                    [
+                                        3.8973447,
+                                        7.4020614
+                                    ],
+                                    [
+                                        3.8972374,
+                                        7.4015933
+                                    ],
+                                    [
+                                        3.8973527,
+                                        7.4014223
+                                    ],
+                                    [
+                                        3.8982245,
+                                        7.4013805
+                                    ],
+                                    [
+                                        3.8988682,
+                                        7.4009975
+                                    ],
+                                    [
+                                        3.8996836,
+                                        7.4003166
+                                    ],
+                                    [
+                                        3.9000484,
+                                        7.3998697
+                                    ],
+                                    [
+                                        3.9010569,
+                                        7.3996569
+                                    ],
+                                    [
+                                        3.9044257,
+                                        7.3991462
+                                    ],
+                                    [
+                                        3.9045545,
+                                        7.4003379
+                                    ],
+                                    [
+                                        3.9062711,
+                                        7.4004017
+                                    ],
+                                    [
+                                        3.907859,
+                                        7.4000825
+                                    ],
+                                    [
+                                        3.9093396,
+                                        7.3998272
+                                    ],
+                                    [
+                                        3.909876,
+                                        7.4013592
+                                    ],
+                                    [
+                                        3.9099833,
+                                        7.4026573
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/82467201"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/303922293",
+                            "amenity": "hospital"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.8928036,
+                                        7.3737569
+                                    ],
+                                    [
+                                        3.8928054,
+                                        7.373662
+                                    ],
+                                    [
+                                        3.8929245,
+                                        7.3736683
+                                    ],
+                                    [
+                                        3.8929587,
+                                        7.3736701
+                                    ],
+                                    [
+                                        3.8929569,
+                                        7.373765
+                                    ],
+                                    [
+                                        3.8928036,
+                                        7.3737569
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/303922293"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/303976298",
+                            "amenity": "hospital",
+                            "building": "yes",
+                            "name": "Molete Health Centre"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.8894728,
+                                        7.3604915
+                                    ],
+                                    [
+                                        3.8893258,
+                                        7.3603952
+                                    ],
+                                    [
+                                        3.8893794,
+                                        7.3603148
+                                    ],
+                                    [
+                                        3.8894269,
+                                        7.3603459
+                                    ],
+                                    [
+                                        3.8894036,
+                                        7.3603809
+                                    ],
+                                    [
+                                        3.889503,
+                                        7.3604461
+                                    ],
+                                    [
+                                        3.8894728,
+                                        7.3604915
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/303976298"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/303978578",
+                            "amenity": "hospital",
+                            "building": "yes",
+                            "name": "Adifase Comprehensive Health Centre"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.8291814,
+                                        7.3867737
+                                    ],
+                                    [
+                                        3.8291238,
+                                        7.3868184
+                                    ],
+                                    [
+                                        3.8290885,
+                                        7.3867738
+                                    ],
+                                    [
+                                        3.8290488,
+                                        7.3868047
+                                    ],
+                                    [
+                                        3.8290753,
+                                        7.3868381
+                                    ],
+                                    [
+                                        3.829023,
+                                        7.3868789
+                                    ],
+                                    [
+                                        3.8289493,
+                                        7.3867858
+                                    ],
+                                    [
+                                        3.8290989,
+                                        7.3866695
+                                    ],
+                                    [
+                                        3.8291814,
+                                        7.3867737
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/303978578"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/500792247",
+                            "amenity": "hospital",
+                            "name": "General Hospital, Okeho"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.3803036,
+                                        8.0435909
+                                    ],
+                                    [
+                                        3.3793648,
+                                        8.04332
+                                    ],
+                                    [
+                                        3.3797806,
+                                        8.0423639
+                                    ],
+                                    [
+                                        3.3801749,
+                                        8.0421355
+                                    ],
+                                    [
+                                        3.3808239,
+                                        8.0423639
+                                    ],
+                                    [
+                                        3.3807918,
+                                        8.0425763
+                                    ],
+                                    [
+                                        3.3803036,
+                                        8.0435909
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/500792247"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/536707297",
+                            "addr:city": "oyo east",
+                            "addr:postcode": "+234",
+                            "addr:street": "Oyo Road",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "healthcare:speciality": "general",
+                            "name": "General Hospital oyo",
+                            "operator": "Government"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9274504,
+                                        7.8321129
+                                    ],
+                                    [
+                                        3.9272439,
+                                        7.8302277
+                                    ],
+                                    [
+                                        3.9291304,
+                                        7.8300249
+                                    ],
+                                    [
+                                        3.9291444,
+                                        7.8301518
+                                    ],
+                                    [
+                                        3.9291899,
+                                        7.8305673
+                                    ],
+                                    [
+                                        3.9292427,
+                                        7.8310498
+                                    ],
+                                    [
+                                        3.929337,
+                                        7.8319101
+                                    ],
+                                    [
+                                        3.9274504,
+                                        7.8321129
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/536707297"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/601252013",
+                            "addr:city": "Ibadan",
+                            "amenity": "hospital",
+                            "building": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Idikan Community Health Centre (UCH Annex)"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.8912506,
+                                        7.3834908
+                                    ],
+                                    [
+                                        3.8911707,
+                                        7.3834857
+                                    ],
+                                    [
+                                        3.8911721,
+                                        7.3834641
+                                    ],
+                                    [
+                                        3.8911555,
+                                        7.383463
+                                    ],
+                                    [
+                                        3.8911581,
+                                        7.3834236
+                                    ],
+                                    [
+                                        3.8911426,
+                                        7.3834226
+                                    ],
+                                    [
+                                        3.8911477,
+                                        7.3833441
+                                    ],
+                                    [
+                                        3.891244,
+                                        7.3833502
+                                    ],
+                                    [
+                                        3.8912412,
+                                        7.3833939
+                                    ],
+                                    [
+                                        3.8912568,
+                                        7.3833949
+                                    ],
+                                    [
+                                        3.8912506,
+                                        7.3834908
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/601252013"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/608141745",
+                            "addr:city": "Ibadan",
+                            "addr:street": "Old Ife Road",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "WELFARE HOSPITAL"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9640842,
+                                        7.3921145
+                                    ],
+                                    [
+                                        3.9640694,
+                                        7.3919483
+                                    ],
+                                    [
+                                        3.9642143,
+                                        7.3919496
+                                    ],
+                                    [
+                                        3.964398,
+                                        7.391943
+                                    ],
+                                    [
+                                        3.9645495,
+                                        7.3919456
+                                    ],
+                                    [
+                                        3.9645536,
+                                        7.3920481
+                                    ],
+                                    [
+                                        3.9644758,
+                                        7.3920481
+                                    ],
+                                    [
+                                        3.9644677,
+                                        7.3920361
+                                    ],
+                                    [
+                                        3.9642263,
+                                        7.3920427
+                                    ],
+                                    [
+                                        3.9642236,
+                                        7.3920733
+                                    ],
+                                    [
+                                        3.96417,
+                                        7.3920866
+                                    ],
+                                    [
+                                        3.9641767,
+                                        7.3921119
+                                    ],
+                                    [
+                                        3.9640842,
+                                        7.3921145
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/608141745"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/701645744",
+                            "amenity": "hospital",
+                            "landuse": "commercial",
+                            "name": "State Hospital"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.3961004,
+                                        8.6728208
+                                    ],
+                                    [
+                                        3.3960387,
+                                        8.671723
+                                    ],
+                                    [
+                                        3.3976587,
+                                        8.6716488
+                                    ],
+                                    [
+                                        3.397707,
+                                        8.6734439
+                                    ],
+                                    [
+                                        3.3961004,
+                                        8.6728208
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/701645744"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/701719434",
+                            "amenity": "hospital",
+                            "building": "yes",
+                            "name": "Baptist Medical Center"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.3997444,
+                                        8.6624805
+                                    ],
+                                    [
+                                        3.3998358,
+                                        8.6624463
+                                    ],
+                                    [
+                                        3.3998162,
+                                        8.6623953
+                                    ],
+                                    [
+                                        3.3996925,
+                                        8.6624416
+                                    ],
+                                    [
+                                        3.3996757,
+                                        8.6623978
+                                    ],
+                                    [
+                                        3.3996097,
+                                        8.6624225
+                                    ],
+                                    [
+                                        3.3995521,
+                                        8.6622718
+                                    ],
+                                    [
+                                        3.3997821,
+                                        8.6621858
+                                    ],
+                                    [
+                                        3.3997976,
+                                        8.6622263
+                                    ],
+                                    [
+                                        3.3999347,
+                                        8.662175
+                                    ],
+                                    [
+                                        3.3999897,
+                                        8.6623188
+                                    ],
+                                    [
+                                        3.3998766,
+                                        8.6623611
+                                    ],
+                                    [
+                                        3.3998787,
+                                        8.6623667
+                                    ],
+                                    [
+                                        3.3998442,
+                                        8.6623796
+                                    ],
+                                    [
+                                        3.3999246,
+                                        8.6625895
+                                    ],
+                                    [
+                                        3.4000874,
+                                        8.6625286
+                                    ],
+                                    [
+                                        3.4001214,
+                                        8.6626173
+                                    ],
+                                    [
+                                        3.399695,
+                                        8.6627768
+                                    ],
+                                    [
+                                        3.399661,
+                                        8.6626878
+                                    ],
+                                    [
+                                        3.3997407,
+                                        8.662658
+                                    ],
+                                    [
+                                        3.39969,
+                                        8.6625256
+                                    ],
+                                    [
+                                        3.3995366,
+                                        8.662583
+                                    ],
+                                    [
+                                        3.3995748,
+                                        8.6626826
+                                    ],
+                                    [
+                                        3.3995149,
+                                        8.662705
+                                    ],
+                                    [
+                                        3.3994746,
+                                        8.6625998
+                                    ],
+                                    [
+                                        3.3994738,
+                                        8.6626001
+                                    ],
+                                    [
+                                        3.3994481,
+                                        8.662533
+                                    ],
+                                    [
+                                        3.399509,
+                                        8.6625102
+                                    ],
+                                    [
+                                        3.3995107,
+                                        8.6625147
+                                    ],
+                                    [
+                                        3.3996595,
+                                        8.662459
+                                    ],
+                                    [
+                                        3.3996559,
+                                        8.6624497
+                                    ],
+                                    [
+                                        3.399587,
+                                        8.6624755
+                                    ],
+                                    [
+                                        3.3995791,
+                                        8.6624549
+                                    ],
+                                    [
+                                        3.3996471,
+                                        8.6624295
+                                    ],
+                                    [
+                                        3.3996461,
+                                        8.6624268
+                                    ],
+                                    [
+                                        3.3996644,
+                                        8.66242
+                                    ],
+                                    [
+                                        3.3996722,
+                                        8.6624403
+                                    ],
+                                    [
+                                        3.3996755,
+                                        8.6624391
+                                    ],
+                                    [
+                                        3.399757,
+                                        8.662652
+                                    ],
+                                    [
+                                        3.3998993,
+                                        8.6625988
+                                    ],
+                                    [
+                                        3.3998626,
+                                        8.6625029
+                                    ],
+                                    [
+                                        3.3997667,
+                                        8.6625388
+                                    ],
+                                    [
+                                        3.3997444,
+                                        8.6624805
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/701719434"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/791453158",
+                            "amenity": "hospital",
+                            "emergency": "yes",
+                            "healthcare": "hospital",
+                            "name": "Adeoyo State Hospital"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.8622431,
+                                        7.3523674
+                                    ],
+                                    [
+                                        3.8615473,
+                                        7.3517051
+                                    ],
+                                    [
+                                        3.8620703,
+                                        7.351279
+                                    ],
+                                    [
+                                        3.8621824,
+                                        7.3511771
+                                    ],
+                                    [
+                                        3.8623739,
+                                        7.3509826
+                                    ],
+                                    [
+                                        3.8623832,
+                                        7.3506537
+                                    ],
+                                    [
+                                        3.8622151,
+                                        7.3507834
+                                    ],
+                                    [
+                                        3.8619582,
+                                        7.350538
+                                    ],
+                                    [
+                                        3.8626388,
+                                        7.3498572
+                                    ],
+                                    [
+                                        3.8628846,
+                                        7.3496717
+                                    ],
+                                    [
+                                        3.863073,
+                                        7.3496883
+                                    ],
+                                    [
+                                        3.8633358,
+                                        7.3499656
+                                    ],
+                                    [
+                                        3.8634693,
+                                        7.3501252
+                                    ],
+                                    [
+                                        3.8635856,
+                                        7.3502994
+                                    ],
+                                    [
+                                        3.8631117,
+                                        7.3506352
+                                    ],
+                                    [
+                                        3.8627708,
+                                        7.3508992
+                                    ],
+                                    [
+                                        3.862626,
+                                        7.3511123
+                                    ],
+                                    [
+                                        3.8628829,
+                                        7.3514365
+                                    ],
+                                    [
+                                        3.863107,
+                                        7.3516727
+                                    ],
+                                    [
+                                        3.8622431,
+                                        7.3523674
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/791453158"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/792054629",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Poly Clinic"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9085913,
+                                        7.4414512
+                                    ],
+                                    [
+                                        3.9085401,
+                                        7.4415906
+                                    ],
+                                    [
+                                        3.9084285,
+                                        7.4415484
+                                    ],
+                                    [
+                                        3.9083123,
+                                        7.4414663
+                                    ],
+                                    [
+                                        3.9082357,
+                                        7.4414252
+                                    ],
+                                    [
+                                        3.9082064,
+                                        7.4413803
+                                    ],
+                                    [
+                                        3.9082039,
+                                        7.4412533
+                                    ],
+                                    [
+                                        3.9082487,
+                                        7.4411661
+                                    ],
+                                    [
+                                        3.9083983,
+                                        7.441192
+                                    ],
+                                    [
+                                        3.9086228,
+                                        7.4412239
+                                    ],
+                                    [
+                                        3.9086065,
+                                        7.4413655
+                                    ],
+                                    [
+                                        3.9085913,
+                                        7.4414512
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/792054629"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795171479",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Isale Osi Primary Health Centre"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.891198,
+                                        7.3739977
+                                    ],
+                                    [
+                                        3.8910356,
+                                        7.3740203
+                                    ],
+                                    [
+                                        3.891018,
+                                        7.373896
+                                    ],
+                                    [
+                                        3.8911804,
+                                        7.3738734
+                                    ],
+                                    [
+                                        3.891198,
+                                        7.3739977
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795171479"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795171724",
+                            "addr:city": "Ibadan",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Police hospital Eleyele Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.865246,
+                                        7.4083486
+                                    ],
+                                    [
+                                        3.8649571,
+                                        7.4083705
+                                    ],
+                                    [
+                                        3.8649242,
+                                        7.4079429
+                                    ],
+                                    [
+                                        3.8652131,
+                                        7.407921
+                                    ],
+                                    [
+                                        3.865246,
+                                        7.4083486
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795171724"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795254773",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Tosin Medical Centre"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.894016,
+                                        7.3746639
+                                    ],
+                                    [
+                                        3.8940003,
+                                        7.3745388
+                                    ],
+                                    [
+                                        3.8940911,
+                                        7.3745276
+                                    ],
+                                    [
+                                        3.8941068,
+                                        7.3746526
+                                    ],
+                                    [
+                                        3.894016,
+                                        7.3746639
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795254773"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795255675",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "sabo public healthcare centre"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.8855298,
+                                        7.4023952
+                                    ],
+                                    [
+                                        3.885574,
+                                        7.4022881
+                                    ],
+                                    [
+                                        3.885597,
+                                        7.4022975
+                                    ],
+                                    [
+                                        3.8856196,
+                                        7.4022428
+                                    ],
+                                    [
+                                        3.8856722,
+                                        7.4022642
+                                    ],
+                                    [
+                                        3.8856978,
+                                        7.4022024
+                                    ],
+                                    [
+                                        3.8857434,
+                                        7.4022209
+                                    ],
+                                    [
+                                        3.8856965,
+                                        7.4023345
+                                    ],
+                                    [
+                                        3.885651,
+                                        7.4024445
+                                    ],
+                                    [
+                                        3.8855298,
+                                        7.4023952
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795255675"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795255841",
+                            "addr:city": "Ibadan",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Odinjo Comprehensive Health Center"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9133571,
+                                        7.3591812
+                                    ],
+                                    [
+                                        3.9131552,
+                                        7.3592895
+                                    ],
+                                    [
+                                        3.913097,
+                                        7.3591827
+                                    ],
+                                    [
+                                        3.9130519,
+                                        7.3591
+                                    ],
+                                    [
+                                        3.9130485,
+                                        7.3590937
+                                    ],
+                                    [
+                                        3.9130316,
+                                        7.3590628
+                                    ],
+                                    [
+                                        3.9130163,
+                                        7.3590348
+                                    ],
+                                    [
+                                        3.9132181,
+                                        7.3589265
+                                    ],
+                                    [
+                                        3.9132465,
+                                        7.3589785
+                                    ],
+                                    [
+                                        3.913249,
+                                        7.358983
+                                    ],
+                                    [
+                                        3.9133518,
+                                        7.3591715
+                                    ],
+                                    [
+                                        3.9133571,
+                                        7.3591812
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795255841"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795258810",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "the polytechnic health center"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.8846066,
+                                        7.437196
+                                    ],
+                                    [
+                                        3.8840944,
+                                        7.4366736
+                                    ],
+                                    [
+                                        3.8848129,
+                                        7.4359811
+                                    ],
+                                    [
+                                        3.8853251,
+                                        7.4365036
+                                    ],
+                                    [
+                                        3.8846066,
+                                        7.437196
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795258810"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795266506",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "idiogun maternity health clinic"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9179182,
+                                        7.3950568
+                                    ],
+                                    [
+                                        3.9178793,
+                                        7.3949796
+                                    ],
+                                    [
+                                        3.9179773,
+                                        7.394851
+                                    ],
+                                    [
+                                        3.9181531,
+                                        7.3949754
+                                    ],
+                                    [
+                                        3.9179182,
+                                        7.3950568
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795266506"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795271230",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "ladisa memorial health center"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9110282,
+                                        7.4479342
+                                    ],
+                                    [
+                                        3.9110381,
+                                        7.4477391
+                                    ],
+                                    [
+                                        3.9111829,
+                                        7.4477463
+                                    ],
+                                    [
+                                        3.911173,
+                                        7.4479414
+                                    ],
+                                    [
+                                        3.9110282,
+                                        7.4479342
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795271230"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795272116",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "agbowo community maternity health center"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9136381,
+                                        7.4497467
+                                    ],
+                                    [
+                                        3.9136431,
+                                        7.4495074
+                                    ],
+                                    [
+                                        3.9137903,
+                                        7.4495104
+                                    ],
+                                    [
+                                        3.9137853,
+                                        7.4497497
+                                    ],
+                                    [
+                                        3.9136381,
+                                        7.4497467
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795272116"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795272700",
+                            "amenity": "hospital",
+                            "building": "hospital",
+                            "healthcare": "hospital",
+                            "name": "ashi health center ( basorun)"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9307144,
+                                        7.4266166
+                                    ],
+                                    [
+                                        3.9306746,
+                                        7.4265618
+                                    ],
+                                    [
+                                        3.9308048,
+                                        7.4264688
+                                    ],
+                                    [
+                                        3.9308446,
+                                        7.4265235
+                                    ],
+                                    [
+                                        3.9307144,
+                                        7.4266166
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795272700"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795272859",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "primary health care center basorun"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9321375,
+                                        7.4153083
+                                    ],
+                                    [
+                                        3.932285,
+                                        7.4151141
+                                    ],
+                                    [
+                                        3.9324593,
+                                        7.4152498
+                                    ],
+                                    [
+                                        3.9322796,
+                                        7.4154599
+                                    ],
+                                    [
+                                        3.9321375,
+                                        7.4153083
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795272859"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795274296",
+                            "addr:city": "Ibadan",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Jericho Nursing Home"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.8699323,
+                                        7.3997786
+                                    ],
+                                    [
+                                        3.8699059,
+                                        7.3998469
+                                    ],
+                                    [
+                                        3.8697014,
+                                        7.3998137
+                                    ],
+                                    [
+                                        3.8694694,
+                                        7.399827
+                                    ],
+                                    [
+                                        3.8690017,
+                                        7.3999329
+                                    ],
+                                    [
+                                        3.8689533,
+                                        7.3998345
+                                    ],
+                                    [
+                                        3.8688863,
+                                        7.3996137
+                                    ],
+                                    [
+                                        3.8698653,
+                                        7.3994461
+                                    ],
+                                    [
+                                        3.869918,
+                                        7.3996102
+                                    ],
+                                    [
+                                        3.8699341,
+                                        7.399712
+                                    ],
+                                    [
+                                        3.8699323,
+                                        7.3997786
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795274296"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795277091",
+                            "addr:city": "Ibadan",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Jericho Specialist Hospital"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.8704459,
+                                        7.3972714
+                                    ],
+                                    [
+                                        3.8702903,
+                                        7.3965586
+                                    ],
+                                    [
+                                        3.8708321,
+                                        7.3964681
+                                    ],
+                                    [
+                                        3.8710869,
+                                        7.3966756
+                                    ],
+                                    [
+                                        3.8711728,
+                                        7.396766
+                                    ],
+                                    [
+                                        3.8711164,
+                                        7.3969389
+                                    ],
+                                    [
+                                        3.8710226,
+                                        7.3970241
+                                    ],
+                                    [
+                                        3.8708429,
+                                        7.3971677
+                                    ],
+                                    [
+                                        3.8705505,
+                                        7.3972634
+                                    ],
+                                    [
+                                        3.8704459,
+                                        7.3972714
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795277091"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795277746",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Ibadan North East LG Primary Health Care Centre, Iwo Road"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9336401,
+                                        7.4045749
+                                    ],
+                                    [
+                                        3.933624,
+                                        7.4043535
+                                    ],
+                                    [
+                                        3.933828,
+                                        7.4043444
+                                    ],
+                                    [
+                                        3.9338442,
+                                        7.4045598
+                                    ],
+                                    [
+                                        3.9336401,
+                                        7.4045749
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795277746"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795278292",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Akeke/Olorombo Health Centre, Bashorun"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9388935,
+                                        7.4159314
+                                    ],
+                                    [
+                                        3.9389933,
+                                        7.4158799
+                                    ],
+                                    [
+                                        3.9390371,
+                                        7.4159631
+                                    ],
+                                    [
+                                        3.9389592,
+                                        7.4160033
+                                    ],
+                                    [
+                                        3.9389372,
+                                        7.4160146
+                                    ],
+                                    [
+                                        3.9388935,
+                                        7.4159314
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795278292"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795526962",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Health Clinic, Aremo, Atipe"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9157295,
+                                        7.3780187
+                                    ],
+                                    [
+                                        3.9159135,
+                                        7.3781381
+                                    ],
+                                    [
+                                        3.9157656,
+                                        7.3783622
+                                    ],
+                                    [
+                                        3.9155817,
+                                        7.3782428
+                                    ],
+                                    [
+                                        3.9156232,
+                                        7.3781799
+                                    ],
+                                    [
+                                        3.9157295,
+                                        7.3780187
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795526962"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795527533",
+                            "amenity": "hospital",
+                            "building": "yes",
+                            "name": "Ode Aje Health Centre"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9161603,
+                                        7.3819773
+                                    ],
+                                    [
+                                        3.9162563,
+                                        7.3819568
+                                    ],
+                                    [
+                                        3.9162706,
+                                        7.3820225
+                                    ],
+                                    [
+                                        3.9162742,
+                                        7.382039
+                                    ],
+                                    [
+                                        3.9162236,
+                                        7.3820497
+                                    ],
+                                    [
+                                        3.9161782,
+                                        7.3820594
+                                    ],
+                                    [
+                                        3.9161603,
+                                        7.3819773
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795527533"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795527695",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "St.Mary's Health Centre"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.918311,
+                                        7.3863295
+                                    ],
+                                    [
+                                        3.9181192,
+                                        7.3855216
+                                    ],
+                                    [
+                                        3.9183852,
+                                        7.3854595
+                                    ],
+                                    [
+                                        3.9185768,
+                                        7.3862675
+                                    ],
+                                    [
+                                        3.918311,
+                                        7.3863295
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795527695"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795529376",
+                            "amenity": "hospital",
+                            "building": "yes",
+                            "name": "Agugu Community Health Centre, Agugu"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9222314,
+                                        7.3844935
+                                    ],
+                                    [
+                                        3.9221939,
+                                        7.3844806
+                                    ],
+                                    [
+                                        3.9221888,
+                                        7.3844951
+                                    ],
+                                    [
+                                        3.9221555,
+                                        7.3844837
+                                    ],
+                                    [
+                                        3.9221702,
+                                        7.3844414
+                                    ],
+                                    [
+                                        3.9221782,
+                                        7.3844183
+                                    ],
+                                    [
+                                        3.9222491,
+                                        7.3844425
+                                    ],
+                                    [
+                                        3.9222314,
+                                        7.3844935
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795529376"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795529635",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Oke'badan Community Health And Maternity Centre"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9231193,
+                                        7.3874493
+                                    ],
+                                    [
+                                        3.9230816,
+                                        7.3874139
+                                    ],
+                                    [
+                                        3.923023,
+                                        7.3873853
+                                    ],
+                                    [
+                                        3.9229892,
+                                        7.3873656
+                                    ],
+                                    [
+                                        3.9229902,
+                                        7.3873341
+                                    ],
+                                    [
+                                        3.9230915,
+                                        7.3873007
+                                    ],
+                                    [
+                                        3.923149,
+                                        7.3872613
+                                    ],
+                                    [
+                                        3.9231778,
+                                        7.387283
+                                    ],
+                                    [
+                                        3.9232718,
+                                        7.3872383
+                                    ],
+                                    [
+                                        3.9233208,
+                                        7.38722
+                                    ],
+                                    [
+                                        3.9233684,
+                                        7.3873469
+                                    ],
+                                    [
+                                        3.9231193,
+                                        7.3874493
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795529635"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795529706",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Oke Adu Health Centre, Oke Adu"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9171557,
+                                        7.3893595
+                                    ],
+                                    [
+                                        3.9171095,
+                                        7.3894123
+                                    ],
+                                    [
+                                        3.9170313,
+                                        7.3893449
+                                    ],
+                                    [
+                                        3.9170775,
+                                        7.3892921
+                                    ],
+                                    [
+                                        3.9171557,
+                                        7.3893595
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795529706"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795529885",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Lagelu Ilupeju Health Centre, Agugu"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9274877,
+                                        7.3866869
+                                    ],
+                                    [
+                                        3.9270609,
+                                        7.3867533
+                                    ],
+                                    [
+                                        3.9270379,
+                                        7.3866185
+                                    ],
+                                    [
+                                        3.9270923,
+                                        7.3865231
+                                    ],
+                                    [
+                                        3.9273559,
+                                        7.3864525
+                                    ],
+                                    [
+                                        3.927404,
+                                        7.3865583
+                                    ],
+                                    [
+                                        3.9274521,
+                                        7.3865355
+                                    ],
+                                    [
+                                        3.9274877,
+                                        7.3866869
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795529885"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795530050",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Ayekale Community Maternity Centre, Agugu"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9280415,
+                                        7.3775839
+                                    ],
+                                    [
+                                        3.9278734,
+                                        7.3777176
+                                    ],
+                                    [
+                                        3.9277902,
+                                        7.3776084
+                                    ],
+                                    [
+                                        3.9276184,
+                                        7.377408
+                                    ],
+                                    [
+                                        3.9278216,
+                                        7.3773365
+                                    ],
+                                    [
+                                        3.9280415,
+                                        7.3775839
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795530050"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/795638827",
+                            "amenity": "hospital",
+                            "building": "hospital",
+                            "name": "Alegongo Primary Health Care Centre"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9520134,
+                                        7.4409964
+                                    ],
+                                    [
+                                        3.9520613,
+                                        7.4409202
+                                    ],
+                                    [
+                                        3.9521556,
+                                        7.4409785
+                                    ],
+                                    [
+                                        3.9521616,
+                                        7.440969
+                                    ],
+                                    [
+                                        3.9520672,
+                                        7.4409106
+                                    ],
+                                    [
+                                        3.9521128,
+                                        7.4408382
+                                    ],
+                                    [
+                                        3.9523386,
+                                        7.4409779
+                                    ],
+                                    [
+                                        3.9522924,
+                                        7.4410513
+                                    ],
+                                    [
+                                        3.952186,
+                                        7.4409855
+                                    ],
+                                    [
+                                        3.952181,
+                                        7.4409934
+                                    ],
+                                    [
+                                        3.9522874,
+                                        7.4410592
+                                    ],
+                                    [
+                                        3.952239,
+                                        7.441136
+                                    ],
+                                    [
+                                        3.9520134,
+                                        7.4409964
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/795638827"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/802976555",
+                            "amenity": "hospital",
+                            "name": "Banby Specialist Hospital"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9434478,
+                                        7.4339533
+                                    ],
+                                    [
+                                        3.9438394,
+                                        7.4333748
+                                    ],
+                                    [
+                                        3.9439722,
+                                        7.4336222
+                                    ],
+                                    [
+                                        3.9436933,
+                                        7.4340916
+                                    ],
+                                    [
+                                        3.9436611,
+                                        7.4341249
+                                    ],
+                                    [
+                                        3.9434478,
+                                        7.4339533
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/802976555"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/802977223",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Chrisbo Medical Centre"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9452601,
+                                        7.4353229
+                                    ],
+                                    [
+                                        3.945346,
+                                        7.4352365
+                                    ],
+                                    [
+                                        3.9455646,
+                                        7.4350676
+                                    ],
+                                    [
+                                        3.9457738,
+                                        7.4352365
+                                    ],
+                                    [
+                                        3.9455538,
+                                        7.435416
+                                    ],
+                                    [
+                                        3.9454627,
+                                        7.4354825
+                                    ],
+                                    [
+                                        3.9452601,
+                                        7.4353229
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/802977223"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/802978665",
+                            "amenity": "hospital",
+                            "name": "The Grace Hospital"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        3.9327795,
+                                        7.4265955
+                                    ],
+                                    [
+                                        3.9329833,
+                                        7.4263561
+                                    ],
+                                    [
+                                        3.933276,
+                                        7.4266168
+                                    ],
+                                    [
+                                        3.9331268,
+                                        7.4268681
+                                    ],
+                                    [
+                                        3.9327795,
+                                        7.4265955
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/802978665"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/1002575898",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Bowen University Teaching Hospital",
+                            "wikidata": "Q30260327"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        4.2333647,
+                                        8.1324923
+                                    ],
+                                    [
+                                        4.2338535,
+                                        8.1329456
+                                    ],
+                                    [
+                                        4.2338616,
+                                        8.1330777
+                                    ],
+                                    [
+                                        4.2340191,
+                                        8.1332271
+                                    ],
+                                    [
+                                        4.2341352,
+                                        8.1332132
+                                    ],
+                                    [
+                                        4.2342511,
+                                        8.1333154
+                                    ],
+                                    [
+                                        4.2346523,
+                                        8.1336691
+                                    ],
+                                    [
+                                        4.2360046,
+                                        8.1348614
+                                    ],
+                                    [
+                                        4.235664,
+                                        8.1353247
+                                    ],
+                                    [
+                                        4.2343403,
+                                        8.1369723
+                                    ],
+                                    [
+                                        4.2330113,
+                                        8.1386344
+                                    ],
+                                    [
+                                        4.2327592,
+                                        8.1389597
+                                    ],
+                                    [
+                                        4.2324917,
+                                        8.1393019
+                                    ],
+                                    [
+                                        4.2324809,
+                                        8.1393268
+                                    ],
+                                    [
+                                        4.2321557,
+                                        8.1390779
+                                    ],
+                                    [
+                                        4.2317681,
+                                        8.1387725
+                                    ],
+                                    [
+                                        4.2314234,
+                                        8.1384818
+                                    ],
+                                    [
+                                        4.2312504,
+                                        8.1383371
+                                    ],
+                                    [
+                                        4.2309406,
+                                        8.13811
+                                    ],
+                                    [
+                                        4.2305249,
+                                        8.1377795
+                                    ],
+                                    [
+                                        4.2299388,
+                                        8.1373095
+                                    ],
+                                    [
+                                        4.2296498,
+                                        8.1370871
+                                    ],
+                                    [
+                                        4.2300005,
+                                        8.1366324
+                                    ],
+                                    [
+                                        4.2313671,
+                                        8.1349663
+                                    ],
+                                    [
+                                        4.2333063,
+                                        8.1325467
+                                    ],
+                                    [
+                                        4.2333647,
+                                        8.1324923
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/1002575898"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/3084912685",
+                            "amenity": "hospital",
+                            "name": "sango pataki community health center"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.8933804,
+                                7.4273008
+                            ]
+                        },
+                        "id": "node/3084912685"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/3084930763",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "ade oyo maternity teaching hospital"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.9025066,
+                                7.3870162
+                            ]
+                        },
+                        "id": "node/3084930763"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/3084963901",
+                            "addr:city": "Ibadan",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Government Chest Hospital,Jericho"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.8720569,
+                                7.3942642
+                            ]
+                        },
+                        "id": "node/3084963901"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/3084968031",
+                            "amenity": "hospital",
+                            "name": "Ibadan North East LG"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.9337956,
+                                7.4036503
+                            ]
+                        },
+                        "id": "node/3084968031"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/3084990095",
+                            "addr:city": "Ibadab",
+                            "addr:postcode": "23402",
+                            "amenity": "hospital",
+                            "name": "Royal Immaculate Hospital"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.9200626,
+                                7.3647318
+                            ]
+                        },
+                        "id": "node/3084990095"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/3084992533",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Alafara Aderogba Health Centre"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.9048908,
+                                7.382775
+                            ]
+                        },
+                        "id": "node/3084992533"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/3084993579",
+                            "amenity": "hospital"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.9198794,
+                                7.3652458
+                            ]
+                        },
+                        "id": "node/3084993579"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/3085001501",
+                            "amenity": "hospital",
+                            "name": "Mapo Health Center"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.8976242,
+                                7.3765199
+                            ]
+                        },
+                        "id": "node/3085001501"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/3085001502",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Immaculate Maternity"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.8976158,
+                                7.3765179
+                            ]
+                        },
+                        "id": "node/3085001502"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/3085021410",
+                            "amenity": "hospital",
+                            "name": "Lagelu Youth Friendly Health Centre, Agugu"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.9268353,
+                                7.3837492
+                            ]
+                        },
+                        "id": "node/3085021410"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/3085040128",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "St. Peters Maternity Health Centre, Aperin"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.918668,
+                                7.3754259
+                            ]
+                        },
+                        "id": "node/3085040128"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/3085040944",
+                            "amenity": "hospital",
+                            "name": "Agbongbon Health Center"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.8994987,
+                                7.3673147
+                            ]
+                        },
+                        "id": "node/3085040944"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/6783464827",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Shalom Medical Centre"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                4.2468255,
+                                8.1430997
+                            ]
+                        },
+                        "id": "node/6783464827"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/7673635590",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "PHC ILORA",
+                            "name:en": "Primary Health Centre, Ilora"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.9000027,
+                                7.8000189
+                            ]
+                        },
+                        "id": "node/7673635590"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/7866669817",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "healthcare:speciality": "general",
+                            "name": "Jolamade Hospital"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.935669,
+                                7.4179858
+                            ]
+                        },
+                        "id": "node/7866669817"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/7956232290",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "LAUTECH Teaching Hospital Dental Centre"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                4.2587015,
+                                8.1599362
+                            ]
+                        },
+                        "id": "node/7956232290"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8859695446",
+                            "amenity": "hospital",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Primary Oral Health Centre, Idikan (UCH Annex)"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.891131,
+                                7.3833391
+                            ]
+                        },
+                        "id": "node/8859695446"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8865685587",
+                            "amenity": "hospital",
+                            "description": "hospital",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Honesty Clinic and Maternity Hospital"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.9069717,
+                                7.4812062
+                            ]
+                        },
+                        "id": "node/8865685587"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8957773586",
+                            "amenity": "hospital",
+                            "area": "Idikan",
+                            "description": "hospital",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Oke Ado Hospital, SW7/217, Ibukun Olu Street, Oke Ado, Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.87972,
+                                7.378138
+                            ]
+                        },
+                        "id": "node/8957773586"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8957773587",
+                            "amenity": "hospital",
+                            "area": "Idikan",
+                            "description": "hospital",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Metropolitan Specialist Hospital and Maternity Home, Beside Concord School, MKO Abiola Road, Oluyole, Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.861981,
+                                7.3650612
+                            ]
+                        },
+                        "id": "node/8957773587"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8957773589",
+                            "amenity": "hospital",
+                            "area": "Idikan",
+                            "description": "hospital",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Abdullahi Hospital, Owode-Academy, Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.91111,
+                                7.350923
+                            ]
+                        },
+                        "id": "node/8957773589"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8957773590",
+                            "amenity": "hospital",
+                            "area": "Idikan",
+                            "description": "hospital",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "St Mary's Catholic Hospital, Eleta, Academy, Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.910747,
+                                7.355292
+                            ]
+                        },
+                        "id": "node/8957773590"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8957773592",
+                            "amenity": "hospital",
+                            "area": "Idikan",
+                            "description": "hospital",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Origbegi Satisfaction maternity hospital, Ayeye"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.8933229,
+                                7.3827501
+                            ]
+                        },
+                        "id": "node/8957773592"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8957773594",
+                            "amenity": "hospital",
+                            "area": "Ibadan;Idikan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Oluyoro Catholic Hospital, Oke Ofa, Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.9194882,
+                                7.3879213
+                            ]
+                        },
+                        "id": "node/8957773594"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8957773595",
+                            "amenity": "hospital",
+                            "area": "Idikan",
+                            "description": "hospital",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Oni and Sons Memorial Hospital, (Adeoyo) Ring Road, Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.861942,
+                                7.362432
+                            ]
+                        },
+                        "id": "node/8957773595"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8957773596",
+                            "amenity": "hospital",
+                            "area": "Idikan",
+                            "description": "hospital",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Oluyole Private Hospital"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.855748,
+                                7.366358
+                            ]
+                        },
+                        "id": "node/8957773596"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8957773597",
+                            "amenity": "hospital",
+                            "area": "Idikan",
+                            "description": "hospital",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Gbemisola Memorial hospital, Boluwaji Area, Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.905348,
+                                7.337547
+                            ]
+                        },
+                        "id": "node/8957773597"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8957773598",
+                            "amenity": "hospital",
+                            "area": "Idikan",
+                            "description": "hospital",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Ibadan Central Hospital, Ososami Road, Oke Ado, New GRA. Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.928578,
+                                7.395518
+                            ]
+                        },
+                        "id": "node/8957773598"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441389",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Alafia Hospital, Mokola, Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.888293,
+                                7.39883
+                            ]
+                        },
+                        "id": "node/8960441389"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441390",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Hamdalat Hospital, Ojoo"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.912443,
+                                7.471787
+                            ]
+                        },
+                        "id": "node/8960441390"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441391",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Molly Specialist Hospital, Idi ape, Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.925715,
+                                7.401532
+                            ]
+                        },
+                        "id": "node/8960441391"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441392",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Dr Sodiq hospital Moniya Olosooko"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.8925129,
+                                7.563724
+                            ]
+                        },
+                        "id": "node/8960441392"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441393",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Comfort Zone Hospital, Akingbile-Moniya Road"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.910152,
+                                7.514385
+                            ]
+                        },
+                        "id": "node/8960441393"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441395",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Al-Lateef Medical Hospital, Akingbile Junction"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.913332,
+                                7.513232
+                            ]
+                        },
+                        "id": "node/8960441395"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441396",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Michael Bella Memorial Hospital, General Gas-Akobo"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.939257,
+                                7.427718
+                            ]
+                        },
+                        "id": "node/8960441396"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441397",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Emmanuel Hospital, Awotan- Apete, Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.87046,
+                                7.450043
+                            ]
+                        },
+                        "id": "node/8960441397"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441398",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Hossana Hospital, Agbowo"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.910355,
+                                7.44208
+                            ]
+                        },
+                        "id": "node/8960441398"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441399",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Tioluwani Private hospital, Idiose, along diplomate school"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.920815,
+                                7.50448
+                            ]
+                        },
+                        "id": "node/8960441399"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441400",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "St Mary's Catholic Hospital, Eleta, Academy, Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.910747,
+                                7.355292
+                            ]
+                        },
+                        "id": "node/8960441400"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441401",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Al-Ameen Hospital, Awotan, Apete"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.861868,
+                                7.448648
+                            ]
+                        },
+                        "id": "node/8960441401"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441402",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Ikolaba Hospital"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.919218,
+                                7.410707
+                            ]
+                        },
+                        "id": "node/8960441402"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441403",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "New Day Hospital, Challenge, express road, Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.912745,
+                                7.34517
+                            ]
+                        },
+                        "id": "node/8960441403"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441404",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Pharmaco Hospital, J and P Road, Moniya road"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.913902,
+                                7.522183
+                            ]
+                        },
+                        "id": "node/8960441404"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441405",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Bolajoko Hospital(Badejoko Hospital) Mokola road, after GTBank"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.892192,
+                                7.41157
+                            ]
+                        },
+                        "id": "node/8960441405"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441406",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "2 Div Military Hospital, Odogbo Cantonment, Ojoo"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.91822,
+                                7.470953
+                            ]
+                        },
+                        "id": "node/8960441406"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960441407",
+                            "amenity": "hospital",
+                            "area": "Ibadan",
+                            "description": "hospital outside Sasa community",
+                            "health_facility:type": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Folawiyo Hospital, Idi-ose"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.91464,
+                                7.50396
+                            ]
+                        },
+                        "id": "node/8960441407"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8982455521",
+                            "addr:city": "Iseyin",
+                            "addr:street": "Iseyin-Oyo Road",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "healthcare:speciality": "general",
+                            "name": "General Hospital Iseyin"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.6175732,
+                                7.9484087
+                            ]
+                        },
+                        "id": "node/8982455521"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/9316149079",
+                            "addr:city": "Oluwa",
+                            "addr:housenumber": "453",
+                            "addr:postcode": "30421",
+                            "addr:street": "Ocnee Street",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "name": "Medical Center",
+                            "operator": "Nurse Practioners",
+                            "operator:type": "public"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.9817031,
+                                7.4279337
+                            ]
+                        },
+                        "id": "node/9316149079"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/9751696131",
+                            "addr:city": "Igbeti",
+                            "addr:postcode": "212102",
+                            "addr:street": "Igbeti-Ogbomoso Road",
+                            "amenity": "hospital",
+                            "healthcare": "hospital",
+                            "healthcare:speciality": "general;paediatrics;gynaecology;biology",
+                            "name": "General Hospital, Igbeti",
+                            "operator": "Oyo State Hospital Management Board",
+                            "operator:type": "public"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                4.1474002,
+                                8.7368773
+                            ]
+                        },
+                        "id": "node/9751696131"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/11032002506",
+                            "addr:street": "Aiyete",
+                            "amenity": "hospital",
+                            "name": "General Hospital"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.2196394,
+                                7.5337506
+                            ]
+                        },
+                        "id": "node/11032002506"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/11032187705",
+                            "addr:street": "Isamuni, Ibarapa North",
+                            "amenity": "hospital",
+                            "name": "Ayete health center"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.2209434,
+                                7.5444068
+                            ]
+                        },
+                        "id": "node/11032187705"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/11032187905",
+                            "addr:street": "Tapa community",
+                            "amenity": "hospital",
+                            "name": "Tuberculosis and Leprosy center Tapa"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.2282472,
+                                7.555652
+                            ]
+                        },
+                        "id": "node/11032187905"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/11032214005",
+                            "addr:street": "Tapa Community",
+                            "amenity": "hospital",
+                            "name": "Tuberculosis and Leprosy center"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.2284683,
+                                7.5556767
+                            ]
+                        },
+                        "id": "node/11032214005"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/11032214105",
+                            "addr:street": "Tapa Community",
+                            "amenity": "hospital",
+                            "name": "Primary Health Center"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.2281454,
+                                7.555432
+                            ]
+                        },
+                        "id": "node/11032214105"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/11032247605",
+                            "addr:street": "Ayete community",
+                            "amenity": "hospital",
+                            "name": "Iyanu Medical Center"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.2263308,
+                                7.552954
+                            ]
+                        },
+                        "id": "node/11032247605"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/11032267805",
+                            "addr:street": "Igboosa community",
+                            "amenity": "hospital",
+                            "name": "Six bed Primary Health care, Tapa"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.2344588,
+                                7.5620279
+                            ]
+                        },
+                        "id": "node/11032267805"
+                    },
+                ]
+            },
 
-    // Color mapping for each LGA
-    const colorMapping = {
-        "Saki West": "#4fa650",  // Red
-        "Atisbo": "#33FF57",  // Green
-        "Iwajowa": "#3357FF",  // Blue
-        "Ibarapa North": "#FF33A1",  // Pink
-        "Ibarapa Central": "#FF8C33",  // Orange
-        "Ibarapa East": "#33FFF6",  // Cyan
-        "Oluyole": "#F5FF33",  // Yellow
-        "Ido": "#8C33FF",  // Purple
-        "Ona Ara": "#FF3333",  // Bright Red
-        "Egbeda": "#fb06c0", // Bright Green
-        "Lagelu": "#3333FF", // Bright Blue
-        "Akinyele": "#1576f3", // Magenta
-        "Ibadan North": "#FF9933", // Light Orange
-        "Ibadan South East": "#33FF8C", // Light Cyan
-        "Ibadan South West": "#FF33A6", // Light Pink
-        "Ibadan North East": "#A6FF33", // Lime Green
-        "Ibadan North West": "#33A6FF", // Sky Blue
-        "Surulere": "#A633FF", // Lavender
-        "Ori Ire": "#FFCC33", // Light Yellow
-        "Saki East": "#FF5733", // Coral
-        "Olorunsogo": "#ce28dc", // Emerald Green
-        "Irepo": "#3357FF", // Cobalt Blue
-        "Ogo Oluwa": "#188a82", // Hot Pink
-        "Afijio": "#FFB733", // Peach
-        "Kajola": "#33FFD6", // Turquoise
-        "Iseyin": "#FFD633", // Lemon Yellow
-        "Itesiwaju": "#d6ee13", // Strawberry
-        "Ìsẹ́yìn": "#CD5C5C", // Neon Green
-        "Orelope": "#3380FF", // Ocean Blue
-        "Atiba": "#393a33", // Violet
-        "Ogbomosho South": "#FF7F33", // Pumpkin
-        "Ogbomosho North": "#33FF4D", // Mint
-        "Oyo West": "#e79cf5",  // Fuchsia
-        "Oyo East": "#28cedc"
-    };
+            'Clinics': {
+                "type": "FeatureCollection",
+                "generator": "overpass-turbo",
+                "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+                "timestamp": "2024-09-24T21:36:15Z",
+                "features": [
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/701458795",
+                            "amenity": "clinic",
+                            "building": "yes",
+                            "level": "1"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        4.3152063,
+                                        7.9084299
+                                    ],
+                                    [
+                                        4.3151888,
+                                        7.9083595
+                                    ],
+                                    [
+                                        4.3152245,
+                                        7.9083509
+                                    ],
+                                    [
+                                        4.3152419,
+                                        7.9084213
+                                    ],
+                                    [
+                                        4.3152063,
+                                        7.9084299
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/701458795"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "way/701458806",
+                            "amenity": "clinic",
+                            "building": "yes",
+                            "level": "1"
+                        },
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [
+                                        4.3151513,
+                                        7.9092522
+                                    ],
+                                    [
+                                        4.315052,
+                                        7.9088749
+                                    ],
+                                    [
+                                        4.3151386,
+                                        7.9088526
+                                    ],
+                                    [
+                                        4.3152379,
+                                        7.9092298
+                                    ],
+                                    [
+                                        4.3151513,
+                                        7.9092522
+                                    ]
+                                ]
+                            ]
+                        },
+                        "id": "way/701458806"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/3085015153",
+                            "amenity": "clinic",
+                            "name": "Oranyan Health Centre"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.9007522,
+                                7.3752243
+                            ]
+                        },
+                        "id": "node/3085015153"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/6539425616",
+                            "addr:city": "Adeleye, Lalupon Road",
+                            "addr:street": "Iwo - Ibadan Road",
+                            "amenity": "clinic",
+                            "healthcare": "clinic",
+                            "healthcare:speciality": "general",
+                            "name": "Adeleye Clinic",
+                            "opening_hours": "Mo-Su 08:00-22:00"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                4.0429522,
+                                7.452146
+                            ]
+                        },
+                        "id": "node/6539425616"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/7002633147",
+                            "amenity": "clinic",
+                            "health_facility:type": "health_centre",
+                            "name": "Mosolape clinic and diagnosis centre"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.9056585,
+                                7.4830225
+                            ]
+                        },
+                        "id": "node/7002633147"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8859749503",
+                            "amenity": "clinic",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Ori Eru PHC"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.8913683,
+                                7.3812558
+                            ]
+                        },
+                        "id": "node/8859749503"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8859749504",
+                            "amenity": "clinic",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Gods Grace Maternity Faith Home"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.8874744,
+                                7.3823922
+                            ]
+                        },
+                        "id": "node/8859749504"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8865604669",
+                            "amenity": "clinic",
+                            "description": "eye clinic",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Noka Optical"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.9094972,
+                                7.4815721
+                            ]
+                        },
+                        "id": "node/8865604669"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8865608605",
+                            "amenity": "clinic",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Sasa Primary Health Center"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.9139432,
+                                7.4858497
+                            ]
+                        },
+                        "id": "node/8865608605"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8959533700",
+                            "amenity": "clinic",
+                            "area": "Idikan",
+                            "description": "Maternity clinic and other special services outside Idikan community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Oreofe Maternity, Ori Eru"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.889233,
+                                7.388237
+                            ]
+                        },
+                        "id": "node/8959533700"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8959533701",
+                            "amenity": "clinic",
+                            "area": "Idikan",
+                            "description": "Maternity clinic and other special services outside Idikan community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Mobolaji Maternity and Ultrasound, 43, Obafemi Awolowo Way, Oke Bola, Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.880898,
+                                7.384015
+                            ]
+                        },
+                        "id": "node/8959533701"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8959533702",
+                            "amenity": "clinic",
+                            "area": "Idikan",
+                            "description": "Maternity clinic and other special services outside Idikan community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "CAC Oke Imole Maternity Home, Agbeni Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.888147,
+                                7.378217
+                            ]
+                        },
+                        "id": "node/8959533702"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475565",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "International Institute of Tropical Agriculture Clinic"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.912627,
+                                7.499873
+                            ]
+                        },
+                        "id": "node/8960475565"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475566",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "University Health Service, Jaja Clinic, UI"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.900756,
+                                7.4425946
+                            ]
+                        },
+                        "id": "node/8960475566"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475567",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Fajimi Maternity Centre, sasa"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.92092,
+                                7.476243
+                            ]
+                        },
+                        "id": "node/8960475567"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475568",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Ramna Hospital (Ramunaak Clinic and maternity Agbamu, Idi Ose"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.923887,
+                                7.50732
+                            ]
+                        },
+                        "id": "node/8960475568"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475569",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Secretariat Staff Clinic , Total Garden road"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.90817,
+                                7.411437
+                            ]
+                        },
+                        "id": "node/8960475569"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475570",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Faith Maternity Clinic & Child Welfare(Mummy Mercy)"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.919748,
+                                7.481307
+                            ]
+                        },
+                        "id": "node/8960475570"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475571",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Orogun Public Healthcare Centre"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.91192,
+                                7.457725
+                            ]
+                        },
+                        "id": "node/8960475571"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475572",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Cureland Medical Centre, Moniya Road, Akingbile"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.915065,
+                                7.522637
+                            ]
+                        },
+                        "id": "node/8960475572"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475573",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Sagbe Clinic(Oluwasogo Clinic)"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.917552,
+                                7.496822
+                            ]
+                        },
+                        "id": "node/8960475573"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475574",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Dola Medical Centre, Iwo-Road/Olodo"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.999038,
+                                7.429368
+                            ]
+                        },
+                        "id": "node/8960475574"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475575",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Olorisa-oko PHC, Akinyele"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.887012,
+                                7.56139
+                            ]
+                        },
+                        "id": "node/8960475575"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475576",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Better Life Health Care, Agbowo"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.909478,
+                                7.441945
+                            ]
+                        },
+                        "id": "node/8960475576"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475577",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Olive Pry Health Centre, iso pako, Bodija"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.920187,
+                                7.439915
+                            ]
+                        },
+                        "id": "node/8960475577"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475578",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Olodo PHC, Ibadan"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                4.013397,
+                                7.417875
+                            ]
+                        },
+                        "id": "node/8960475578"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475579",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "As-salam Medical Centre, Office bus-stop Sasa"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.914403,
+                                7.48623
+                            ]
+                        },
+                        "id": "node/8960475579"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475580",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Ojoo Pry Healthcare Centre"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.91562,
+                                7.471148
+                            ]
+                        },
+                        "id": "node/8960475580"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475581",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Aroro Pry Health Centre, Ojoo"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.9578937,
+                                7.5231043
+                            ]
+                        },
+                        "id": "node/8960475581"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475582",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Moniya private clinic(His Favour Hospital) Moniya"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.908552,
+                                7.532175
+                            ]
+                        },
+                        "id": "node/8960475582"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960475583",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "Clinic outside Sasa community",
+                            "health_facility:type": "clinic",
+                            "healthcare": "clinic",
+                            "name": "Federal School of Statistics (FSS) Clinic, Sasa"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.9042,
+                                7.476073
+                            ]
+                        },
+                        "id": "node/8960475583"
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": {
+                            "@id": "node/8960501353",
+                            "amenity": "clinic",
+                            "area": "Ibadan",
+                            "description": "traditional or alternative medicine",
+                            "health_facility:type": "alternative",
+                            "healthcare": "alternative",
+                            "name": "Baba David Clinic (Faithbased Clinic) Oke Alasepe Abaeja"
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                3.916933,
+                                7.476017
+                            ]
+                        },
+                        "id": "node/8960501353"
+                    },
+                ]
+            },
+        };
 
-    // Add the LGA GeoJSON source to the map
-    map.addSource('lga-boundaries', {
+        // Filter to get only LGA boundaries
+        const lgaBoundaries = {
+            "type": "FeatureCollection",
+            "features": lgaBoundariesGeoJSON.features.filter(feature =>
+                feature.properties.admin_level === "6" &&
+                feature.properties.boundary === "administrative" &&
+                feature.properties.type === "boundary" &&
+                feature.geometry.type === "Polygon"
+            )
+        };
+            const colorMapping = {
+                "Saki West": "#4fa650",
+                "Atisbo": "#33FF57",
+                "Iwajowa": "#3357FF",
+                "Ibarapa North": "#FF33A1",
+                "Ibarapa Central": "#FF8C33",
+                "Ibarapa East": "#33FFF6",
+                "Oluyole": "#F5FF33",
+                "Ido": "#8C33FF",
+                "Ona Ara": "#FF3333",
+                "Egbeda": "#fb06c0",
+                "Lagelu": "#3333FF",
+                "Akinyele": "#1576f3",
+                "Ibadan North": "#FF9933",
+                "Ibadan South East": "#33FF8C",
+                "Ibadan South West": "#FF33A6",
+                "Ibadan North East": "#A6FF33",
+                "Ibadan North West": "#33A6FF",
+                "Surulere": "#A633FF",
+                "Ori Ire": "#FFCC33",
+                "Saki East": "#FF5733",
+                "Olorunsogo": "#ce28dc",
+                "Irepo": "#3357FF",
+                "Ogo Oluwa": "#188a82",
+                "Afijio": "#FFB733",
+                "Kajola": "#33FFD6",
+                "Iseyin": "#FFD633",
+                "Itesiwaju": "#d6ee13",
+                "Ìsẹ́yìn": "#CD5C5C",
+                "Orelope": "#3380FF",
+                "Atiba": "#393a33",
+                "Ogbomosho South": "#FF7F33",
+                "Ogbomosho North": "#33FF4D",
+                "Oyo West": "#e79cf5",
+                "Oyo East": "#28cedc"
+            };
+
+        // Infrastructure color mapping
+        const infrastructureColorMapping = {
+            'Hospitals': '#FF0000', // Red
+            'Clinics': '#0000FF', // Blue
+            'Health Centers': '#00FF00' // Green
+        };
+
+
+    function addLGABoundaries(geojson) {
+        map.addSource('lga-boundaries', {
+            'type': 'geojson',
+            'data': geojson
+        });
+
+        Object.keys(colorMapping).forEach(lgaName => {
+            const layerId = 'lga-' + lgaName;
+            map.addLayer({
+                'id': layerId,
+                'type': 'fill',
+                'source': 'lga-boundaries',
+                'filter': ['==', ['get', 'name'], lgaName],
+                'paint': {
+                    'fill-color': colorMapping[lgaName],
+                    'fill-opacity': 0.6
+                }
+            });
+        });
+    }
+
+    function addInfrastructureLayer(type, geojson) {
+    map.addSource(type, {
         'type': 'geojson',
-        'data': lgaBoundaries
+        'data': geojson
     });
 
-    // Add a fill layer to display the LGA boundaries
     map.addLayer({
-        'id': 'lga-boundaries-fill',
-        'type': 'fill',
-        'source': 'lga-boundaries',
+        'id': type + '-points',
+        'type': 'circle',
+        'source': type,
         'layout': {},
         'paint': {
-            'fill-color': [
-                'case',
-                ...Object.entries(colorMapping).flatMap(([lgaName, color]) => [
-                    ['==', ['get', 'name'], lgaName], color
-                ]),
-                '#888888' // Default fill color if no match found
-            ],
-            'fill-opacity': 0.8 // Opacity of the LGA boundaries
+            'circle-color': infrastructureColorMapping[type],
+            'circle-radius': 5,
+            'circle-opacity': 1
         }
     });
 
-    // Add a line layer to emphasize the boundary
-    map.addLayer({
-        'id': 'lga-boundaries-line',
-        'type': 'line',
-        'source': 'lga-boundaries',
-        'layout': {},
-        'paint': {
-            'line-color': '#000000', // Color of the boundary line
-            'line-width': 2
+    // Click event for infrastructure points
+    map.on('click', type + '-points', function (e) {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.name || e.features[0].properties.amenity || 'No Description Available'; // Update fallback logic
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
+        new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(map);
+    });
+
+    // Hover event for infrastructure points
+    map.on('mouseenter', type + '-points', function (e) {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.name || e.features[0].properties.amenity || 'No Description Available'; // Update fallback logic
+        const popup = new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(map);
+
+        // Change the cursor style
+        map.getCanvas().style.cursor = 'pointer';
+
+        // Remove popup on mouse leave
+        map.on('mouseleave', type + '-points', function () {
+            popup.remove();
+            map.getCanvas().style.cursor = ''; // Reset cursor
+        });
+    });
+}
+
+    function addLegend() {
+        const legend = document.getElementById('legend');
+        legend.innerHTML = '<h4>Legend</h4>';
+        Object.keys(infrastructureColorMapping).forEach(type => {
+            const color = infrastructureColorMapping[type];
+            const count = healthInfrastructureData[type].features.length; // Count the number of features for each type
+            const item = document.createElement('div');
+            item.innerHTML = `<span style="background-color: ${color}"></span>${type}: ${count}`; // Display count next to type
+            legend.appendChild(item);
+        });
+    }
+
+    map.on('load', function () {
+        addLGABoundaries(lgaBoundariesGeoJSON);
+        Object.keys(healthInfrastructureData).forEach(type => {
+            addInfrastructureLayer(type, healthInfrastructureData[type]);
+        });
+        addLegend();
     });
 
     let lastClickedLGA = null; // Store the last clicked LGA
     let currentPopup = null; // Store the current popup
-    
-    function addLegend() {
-    const legend = document.getElementById('legend');
-    legend.innerHTML = '<h4>Legend</h4>';  // Clear the legend and add a header
 
-    // Iterate over the colorMapping object
-    Object.keys(colorMapping).forEach(lgaName => {
-        const color = colorMapping[lgaName];
-
-        // Create a container for each legend item
-        const item = document.createElement('div');
-        item.style.display = 'flex';
-        item.style.alignItems = 'center';
-        item.style.marginBottom = '5px';
-
-        // Create a colored circle representing the LGA color
-        const colorBox = document.createElement('span');
-        colorBox.style.backgroundColor = color;
-        colorBox.style.height = '12px';
-        colorBox.style.width = '12px';
-        colorBox.style.borderRadius = '50%';
-        colorBox.style.marginRight = '5px';
-
-        // Create a label with the LGA name
-        const label = document.createElement('span');
-        label.textContent = lgaName;
-
-        // Append the color box and label to the item
-        item.appendChild(colorBox);
-        item.appendChild(label);
-
-        // Append the item to the legend
-        legend.appendChild(item);
-    });
-}
-
-
-    map.on('load', function () {
-        addSource(geojsonData);
-        Object.keys(geojsonData).forEach(type => {
-            addInfrastructureLayer(type, geojsonData[type]);
-        });
-        addLegend();
-    });
-    // Add click functionality for each LGA
     Object.keys(colorMapping).forEach(lgaName => {
         const layerId = 'lga-' + lgaName;
 
-        // Click event for each LGA
         map.on('click', layerId, function (e) {
             const coordinates = e.lngLat;
             const currentLGAName = e.features[0].properties.name;
             const source = e.features[0].properties.source;
 
-            // If there was a previously clicked LGA, reset its color
+            // Reset the last clicked LGA to default state
             if (lastClickedLGA) {
-                map.setPaintProperty('lga-' + lastClickedLGA, 'fill-color', colorMapping[lastClickedLGA]);
+                const previousLayerId = 'lga-' + lastClickedLGA;
+                map.setPaintProperty(previousLayerId, 'fill-opacity', 0.8); // Reset opacity
+                map.flyTo({
+                    center: [3.93125, 7.85257], // Default center coordinates
+                    zoom: 7.2, // Default zoom level
+                    essential: true
+                });
             }
 
-            // Blink the clicked LGA red twice
+            // Blink the clicked LGA red twice and make it transparent
             const blinkRed = (lgaName) => {
                 map.setPaintProperty(layerId, 'fill-color', 'rgba(255, 0, 0, 1)'); // Blink red
                 setTimeout(() => {
                     map.setPaintProperty(layerId, 'fill-color', colorMapping[lgaName]); // Revert color
-                }, 300); // First blink delay
-
+                }, 300);
                 setTimeout(() => {
                     map.setPaintProperty(layerId, 'fill-color', 'rgba(255, 0, 0, 1)'); // Blink red again
-                }, 600); // Second blink delay
-
+                }, 600);
                 setTimeout(() => {
-                    map.setPaintProperty(layerId, 'fill-color', 'rgba(0, 0, 0, 0'); // Make transparent
-                }, 900); // Transparent after blinking
+                    map.setPaintProperty(layerId, 'fill-color', 'rgba(0, 0, 0, 0)'); // Transparent
+                    map.setPaintProperty(layerId, 'fill-opacity', 0.1); // Lower opacity
+                }, 900);
 
-                // Show the popup after making it transparent
                 setTimeout(() => {
                     if (currentPopup) {
                         currentPopup.remove(); // Remove any existing popup
@@ -47815,48 +51769,29 @@
 
             blinkRed(currentLGAName); // Trigger the blinking effect
 
-            // Update the last clicked LGA
-            lastClickedLGA = currentLGAName;
-        });
-    });
+            // Zoom into the clicked LGA
+            map.flyTo({
+                center: coordinates,
+                zoom: 11, // Adjust the zoom level as needed
+                essential: true // This animation is considered essential with respect to prefers-reduced-motion
+            });
 
-    // Add hover functionality for each LGA
-    Object.keys(colorMapping).forEach(lgaName => {
-        const layerId = 'lga-' + lgaName;
-
-        // Create a layer for each LGA for hover
-        map.addLayer({
-            'id': layerId,
-            'type': 'fill',
-            'source': 'lga-boundaries',
-            'filter': ['==', ['get', 'name'], lgaName],
-            'paint': {
-                'fill-color': colorMapping[lgaName],
-                'fill-opacity': 0.8
-            }
+            lastClickedLGA = currentLGAName; // Update the last clicked LGA
         });
 
         // Hover effect for individual LGA
-        map.on('mouseenter', layerId, function (e) {
+        map.on('mouseenter', layerId, function () {
             map.getCanvas().style.cursor = 'pointer';
-            map.setPaintProperty(layerId, 'fill-opacity', 0.3); // Lower opacity on hover
+            map.setPaintProperty(layerId, 'fill-opacity', 0.8); // Lower opacity on hover
         });
 
         map.on('mouseleave', layerId, function () {
             map.getCanvas().style.cursor = ''; // Reset cursor
-            map.setPaintProperty(layerId, 'fill-opacity', 0.8); // Reset opacity
+            map.setPaintProperty(layerId, 'fill-opacity', 0.6); // Reset opacity
         });
     });
-});
-
-
-
     </script>
-
-     <!-- Bootstrap JS, Popper.js, and jQuery -->
-     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/@turf/turf@^7/turf.min.js"></script>
 </body>
 
 </html>

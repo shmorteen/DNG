@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Digital Infrastructure Map</title>
+    <title>Healthcare Infrastructure Map</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
@@ -38,11 +38,11 @@
             font-size: 12px;
             border-radius: 3px;
             position: absolute;
-            bottom: 30px;
+            bottom: 100px;
             left: 10px;
             z-index: 1;
-            max-height: 50%; /* Limit the height for mobile */
-            overflow-y: auto; /* Scroll if content is too tall */
+            max-height: 50%;
+            overflow-y: auto;
         }
 
         .legend div {
@@ -71,17 +71,17 @@
             .nav-item {
                 margin-right: 5px;
                 margin-bottom: 5px;
-                font-size: 14px; /* Smaller font size for mobile */
+                font-size: 14px;
             }
 
             .legend {
                 bottom: 10px;
                 left: 10px;
-                font-size: 10px; /* Smaller font size for mobile */
+                font-size: 10px;
             }
 
             .navbar-brand {
-                height: 30px; /* Adjust brand image size */
+                height: 30px;
             }
         }
     </style>
@@ -89,7 +89,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg" style="background-color: #119A5C;">
-        <img class="navbar-brand mb-lg-2" src="https://digitalnigeria.gov.ng/wp-content/uploads/2023/10/logo-2048x1457.png"
+        <img class="navbar-brand" src="https://digitalnigeria.gov.ng/wp-content/uploads/2023/10/logo-2048x1457.png"
             style="padding:3px; border-radius: 5px; border:2px solid white;height: 40px; width: auto;">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,46 +101,61 @@
                 <li class="nav-item">
                     <a class="nav-link" href="index.html">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="education.html">School</a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="healthcare.html">Healthcare</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="healthcare.html">Healthcare</a>
+                    <a class="nav-link" href="education.html">Education</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="utilities.html">Utilities</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="public.html">Public Services</a>
+                    <a class="nav-link" href="public-services.html">Public Services</a>
                 </li>
             </ul>
         </div>
     </nav>
+
     <div id="map"></div>
     <div id="legend" class="legend"></div>
 
+    <div id="filter" class="filter-container" style="position: absolute; top: 80px; left: 10px; z-index: 2; background: white; padding: 10px; border-radius: 5px;">
+        <h5>Filter Infrastructure</h5>
+        <div>
+            <input type="checkbox" id="schools" checked>
+            <label for="schools">Schools</label>
+        </div>
+        <div>
+            <input type="checkbox" id="colleges" checked>
+            <label for="colleges">Colleges</label>
+        </div>
+        <div>
+            <input type="checkbox" id="universities" checked>
+            <label for="universities">Universities</label>
+        </div>
+    </div>
 
-    <!-- Mapbox script -->
+
     <script>
         mapboxgl.accessToken = 'pk.eyJ1Ijoic2htb3J0ZWVuIiwiYSI6ImNtMTQ5d2h1dzFicm0ya3NjODBwd3phbWgifQ.WsGwh7Mrr7X-xf751eEHFw';
 
         const map = new mapboxgl.Map({
-            container: 'map', // container ID
-            style: 'mapbox://styles/mapbox/streets-v11', // map style
-            center: [3.93125, 7.85257], // [lng, lat] coordinates for the map center
-            zoom: 7.2 // starting zoom level
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [3.93125, 7.85257],
+            zoom: 7.2
         });
 
-        // Add zoom and rotation controls
         map.addControl(new mapboxgl.NavigationControl());
-
-        // Add geolocation control to the map
         map.addControl(new mapboxgl.GeolocateControl({
             positionOptions: { enableHighAccuracy: true },
             trackUserLocation: true
         }));
 
-        var geojsonData =
+
+        // Define LGA boundaries GeoJSON data
+        const lgaBoundariesGeoJSON =
         {
             "type": "FeatureCollection",
             "generator": "overpass-turbo",
@@ -47637,171 +47652,2682 @@
                     "id": "node/2163706717"
                 }
             ]
-        }
+        };
 
-        map.on('load', function () {
-    // Filter to get only LGA boundaries
-    const lgaBoundaries = {
-        "type": "FeatureCollection",
-        "features": geojsonData.features.filter(feature =>
-            feature.properties.admin_level === "6" &&
-            feature.properties.boundary === "administrative" &&
-            feature.properties.type === "boundary" &&
-            feature.geometry.type === "Polygon"
-        )
-    };
-
-    // Color mapping for each LGA
-    const colorMapping = {
-        "Saki West": "#4fa650",  // Red
-        "Atisbo": "#33FF57",  // Green
-        "Iwajowa": "#3357FF",  // Blue
-        "Ibarapa North": "#FF33A1",  // Pink
-        "Ibarapa Central": "#FF8C33",  // Orange
-        "Ibarapa East": "#33FFF6",  // Cyan
-        "Oluyole": "#F5FF33",  // Yellow
-        "Ido": "#8C33FF",  // Purple
-        "Ona Ara": "#FF3333",  // Bright Red
-        "Egbeda": "#fb06c0", // Bright Green
-        "Lagelu": "#3333FF", // Bright Blue
-        "Akinyele": "#1576f3", // Magenta
-        "Ibadan North": "#FF9933", // Light Orange
-        "Ibadan South East": "#33FF8C", // Light Cyan
-        "Ibadan South West": "#FF33A6", // Light Pink
-        "Ibadan North East": "#A6FF33", // Lime Green
-        "Ibadan North West": "#33A6FF", // Sky Blue
-        "Surulere": "#A633FF", // Lavender
-        "Ori Ire": "#FFCC33", // Light Yellow
-        "Saki East": "#FF5733", // Coral
-        "Olorunsogo": "#ce28dc", // Emerald Green
-        "Irepo": "#3357FF", // Cobalt Blue
-        "Ogo Oluwa": "#188a82", // Hot Pink
-        "Afijio": "#FFB733", // Peach
-        "Kajola": "#33FFD6", // Turquoise
-        "Iseyin": "#FFD633", // Lemon Yellow
-        "Itesiwaju": "#d6ee13", // Strawberry
-        "Ìsẹ́yìn": "#CD5C5C", // Neon Green
-        "Orelope": "#3380FF", // Ocean Blue
-        "Atiba": "#393a33", // Violet
-        "Ogbomosho South": "#FF7F33", // Pumpkin
-        "Ogbomosho North": "#33FF4D", // Mint
-        "Oyo West": "#e79cf5",  // Fuchsia
-        "Oyo East": "#28cedc"
-    };
-
-    // Add the LGA GeoJSON source to the map
-    map.addSource('lga-boundaries', {
-        'type': 'geojson',
-        'data': lgaBoundaries
-    });
-
-    // Add a fill layer to display the LGA boundaries
-    map.addLayer({
-        'id': 'lga-boundaries-fill',
-        'type': 'fill',
-        'source': 'lga-boundaries',
-        'layout': {},
-        'paint': {
-            'fill-color': [
-                'case',
-                ...Object.entries(colorMapping).flatMap(([lgaName, color]) => [
-                    ['==', ['get', 'name'], lgaName], color
-                ]),
-                '#888888' // Default fill color if no match found
+        // Define education infrastructure data
+        const educationInfrastructureData = {
+            'Schools':{
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2024-09-25T09:25:29Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/959814020",
+        "amenity": "school",
+        "name": "Army Children School Iwo-Road"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9362737,
+          7.4054032
+        ]
+      },
+      "id": "node/959814020"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/959819185",
+        "amenity": "school",
+        "name": "Bishop Philip Academy"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9462407,
+          7.4054458
+        ]
+      },
+      "id": "node/959819185"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/2594871647",
+        "amenity": "school",
+        "name": "Methodist Grammer School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9121352,
+          7.4292471
+        ]
+      },
+      "id": "node/2594871647"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/2639209657",
+        "amenity": "school",
+        "name": "Subola Memorial School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9109608,
+          7.4029694
+        ]
+      },
+      "id": "node/2639209657"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/2639209664",
+        "amenity": "school",
+        "name": "Methodist School II"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9135518,
+          7.4203911
+        ]
+      },
+      "id": "node/2639209664"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/2639209672",
+        "amenity": "school",
+        "name": "Oritamefa Baptist Model School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9077529,
+          7.397554
+        ]
+      },
+      "id": "node/2639209672"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/2639209678",
+        "amenity": "school",
+        "name": "Methodist Primary School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9105497,
+          7.4365092
+        ]
+      },
+      "id": "node/2639209678"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/2639220711",
+        "amenity": "school",
+        "name": "Lead City High School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.8625867,
+          7.3990673
+        ]
+      },
+      "id": "node/2639220711"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/2639256417",
+        "amenity": "school",
+        "name": "Urban Day School",
+        "operator": "Oyo State Ministry of Education"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.8683363,
+          7.3995199
+        ]
+      },
+      "id": "node/2639256417"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3084973399",
+        "amenity": "school",
+        "name": "Sacred Heart Private School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.8780142,
+          7.393336
+        ]
+      },
+      "id": "node/3084973399"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3085003070",
+        "amenity": "school",
+        "name:ar": "مدرسة"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.8981063,
+          7.3756043
+        ]
+      },
+      "id": "node/3085003070"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3085023331",
+        "amenity": "school"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9030953,
+          7.3780503
+        ]
+      },
+      "id": "node/3085023331"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3085028890",
+        "addr:city": "Ibadan",
+        "amenity": "school",
+        "name": "Ebenezer African Church School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.8872685,
+          7.3920393
+        ]
+      },
+      "id": "node/3085028890"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3707297254",
+        "amenity": "school",
+        "name": "Educational Advancement Centre"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9009386,
+          7.4181966
+        ]
+      },
+      "id": "node/3707297254"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3711136205",
+        "amenity": "school",
+        "name": "Iclass Tuition"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9217724,
+          7.4248545
+        ]
+      },
+      "id": "node/3711136205"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3712817761",
+        "amenity": "school",
+        "name": "B & B Nursery and Primary School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9419286,
+          7.4311165
+        ]
+      },
+      "id": "node/3712817761"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3723243894",
+        "amenity": "school",
+        "name": "Knowledge Base International Kiddies Embassy"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9244815,
+          7.5265159
+        ]
+      },
+      "id": "node/3723243894"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3723243896",
+        "amenity": "school",
+        "name": "Titbun High School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9233886,
+          7.5249811
+        ]
+      },
+      "id": "node/3723243896"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3768146134",
+        "amenity": "school",
+        "name": "J Nissi College"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9607938,
+          7.4386537
+        ]
+      },
+      "id": "node/3768146134"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/5630430883",
+        "addr:city": "Ibadan",
+        "addr:postcode": "200113",
+        "amenity": "school",
+        "name": "St Peter Ojuolape"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0306388,
+          7.4473769
+        ]
+      },
+      "id": "node/5630430883"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6767086649",
+        "addr:city": "Ogbomoso",
+        "addr:postcode": "210271",
+        "addr:street": "Maryland Drive",
+        "amenity": "school",
+        "name": "Maryland Catholic Nursery and Primary School",
+        "operator": "Catholic Church",
+        "operator:type": "private"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2480194,
+          8.1589802
+        ]
+      },
+      "id": "node/6767086649"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6773145378",
+        "amenity": "school",
+        "name": "Nigerian Baptist Theological Seminary"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2324972,
+          8.1323551
+        ]
+      },
+      "id": "node/6773145378"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6773178292",
+        "amenity": "school",
+        "name": "ZOE School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2550269,
+          8.1540858
+        ]
+      },
+      "id": "node/6773178292"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6773178301",
+        "amenity": "school",
+        "name": "Kingdom Heritage Model School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2577132,
+          8.1643121
+        ]
+      },
+      "id": "node/6773178301"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6773279265",
+        "amenity": "school",
+        "name": "Anglican Model College Ogbomoso (AMCO)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2417587,
+          8.1422566
+        ]
+      },
+      "id": "node/6773279265"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6773279279",
+        "amenity": "school",
+        "name": "Ogbomoso Girl's High School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2454298,
+          8.1605435
+        ]
+      },
+      "id": "node/6773279279"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6773300985",
+        "amenity": "school",
+        "name": "Bowen School of Nursing"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.234967,
+          8.1357906
+        ]
+      },
+      "id": "node/6773300985"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6783464813",
+        "amenity": "school",
+        "name": "ADS Primary School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2528334,
+          8.142825
+        ]
+      },
+      "id": "node/6783464813"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6783464814",
+        "amenity": "school",
+        "name": "Masifa DC Primary School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2513099,
+          8.1411257
+        ]
+      },
+      "id": "node/6783464814"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6971310984",
+        "amenity": "school",
+        "name": "Sasa Community School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9132825,
+          7.4858622
+        ]
+      },
+      "id": "node/6971310984"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6990796670",
+        "amenity": "school",
+        "name": "Forestry Research Institute of Nigeria"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.8624923,
+          7.3921911
+        ]
+      },
+      "id": "node/6990796670"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/7866669809",
+        "amenity": "school",
+        "name": "Islamic High School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9342074,
+          7.4194034
+        ]
+      },
+      "id": "node/7866669809"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/8982448608",
+        "addr:city": "Iseyin",
+        "addr:street": "Iseyin-Oyo Road, Barracks",
+        "amenity": "school",
+        "name": "Iseyin District Grammar School",
+        "operator": "Oyo State Government",
+        "operator:type": "government",
+        "religion": "multifaith"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.6154227,
+          7.9554307
+        ]
+      },
+      "id": "node/8982448608"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9751697359",
+        "addr:city": "Igbeti",
+        "addr:postcode": "212102",
+        "addr:street": "Igbeti-Ogbomoso Road",
+        "amenity": "school",
+        "name": "St. Paul Anglican Primary School",
+        "operator": "Government",
+        "operator:type": "government"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.1414939,
+          8.7431921
+        ]
+      },
+      "id": "node/9751697359"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9865261518",
+        "amenity": "school",
+        "survey:date": "2022-06-30"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.8890351,
+          7.4048085
+        ]
+      },
+      "id": "node/9865261518"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899570010",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0690428,
+          8.1625963
+        ]
+      },
+      "id": "node/9899570010"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899573274",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0719462,
+          8.2367529
+        ]
+      },
+      "id": "node/9899573274"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899573275",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0734883,
+          8.2327719
+        ]
+      },
+      "id": "node/9899573275"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899587209",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.652523,
+          7.6990873
+        ]
+      },
+      "id": "node/9899587209"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899591696",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0107484,
+          8.1936792
+        ]
+      },
+      "id": "node/9899591696"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899591710",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0101863,
+          8.1940996
+        ]
+      },
+      "id": "node/9899591710"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899595494",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0819456,
+          8.3508838
+        ]
+      },
+      "id": "node/9899595494"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899600722",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0722844,
+          8.2360543
+        ]
+      },
+      "id": "node/9899600722"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899600727",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0744111,
+          8.2321408
+        ]
+      },
+      "id": "node/9899600727"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899605438",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0544557,
+          8.3241223
+        ]
+      },
+      "id": "node/9899605438"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899605452",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0559817,
+          8.3237426
+        ]
+      },
+      "id": "node/9899605452"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899605480",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0534131,
+          8.3245493
+        ]
+      },
+      "id": "node/9899605480"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899606231",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0665256,
+          8.1647394
+        ]
+      },
+      "id": "node/9899606231"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899606505",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0029705,
+          8.149872
+        ]
+      },
+      "id": "node/9899606505"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899606515",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0015611,
+          8.1579812
+        ]
+      },
+      "id": "node/9899606515"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899607431",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.014017,
+          8.1897351
+        ]
+      },
+      "id": "node/9899607431"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899607441",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.012484,
+          8.1882766
+        ]
+      },
+      "id": "node/9899607441"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899607465",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0139957,
+          8.1911064
+        ]
+      },
+      "id": "node/9899607465"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899608362",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0057294,
+          8.1622733
+        ]
+      },
+      "id": "node/9899608362"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899608365",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0017129,
+          8.1563964
+        ]
+      },
+      "id": "node/9899608365"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899608409",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0052575,
+          8.1509874
+        ]
+      },
+      "id": "node/9899608409"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899609298",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2422955,
+          8.4548846
+        ]
+      },
+      "id": "node/9899609298"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899609356",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.7092478,
+          7.6070099
+        ]
+      },
+      "id": "node/9899609356"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899609360",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.7086316,
+          7.6089301
+        ]
+      },
+      "id": "node/9899609360"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899610433",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0801333,
+          8.2522924
+        ]
+      },
+      "id": "node/9899610433"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899610463",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0812991,
+          8.2556158
+        ]
+      },
+      "id": "node/9899610463"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899611219",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.7321258,
+          7.595914
+        ]
+      },
+      "id": "node/9899611219"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899611387",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.4124857,
+          8.8249802
+        ]
+      },
+      "id": "node/9899611387"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899611607",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.1326859,
+          8.4241253
+        ]
+      },
+      "id": "node/9899611607"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899617144",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0700805,
+          8.3919606
+        ]
+      },
+      "id": "node/9899617144"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899617950",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.597935,
+          7.6026184
+        ]
+      },
+      "id": "node/9899617950"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899620234",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.1310995,
+          8.4217232
+        ]
+      },
+      "id": "node/9899620234"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899620271",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0080501,
+          8.2413426
+        ]
+      },
+      "id": "node/9899620271"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899621269",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2425705,
+          8.454498
+        ]
+      },
+      "id": "node/9899621269"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899621370",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2415425,
+          8.4616554
+        ]
+      },
+      "id": "node/9899621370"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899622417",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2670368,
+          8.4288619
+        ]
+      },
+      "id": "node/9899622417"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899622422",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2652794,
+          8.4314413
+        ]
+      },
+      "id": "node/9899622422"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899622434",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.267123,
+          8.4284474
+        ]
+      },
+      "id": "node/9899622434"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899622493",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9778183,
+          8.2265514
+        ]
+      },
+      "id": "node/9899622493"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899625287",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.107987,
+          8.2859278
+        ]
+      },
+      "id": "node/9899625287"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899626457",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0796627,
+          8.280176
+        ]
+      },
+      "id": "node/9899626457"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899627823",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.0058398,
+          8.2404772
+        ]
+      },
+      "id": "node/9899627823"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899813659",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.1880765,
+          7.8524041
+        ]
+      },
+      "id": "node/9899813659"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899821491",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.9980628,
+          8.282775
+        ]
+      },
+      "id": "node/9899821491"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899821495",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.9956885,
+          8.2808
+        ]
+      },
+      "id": "node/9899821495"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899836985",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.2256343,
+          7.8502216
+        ]
+      },
+      "id": "node/9899836985"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899847278",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.1503263,
+          7.8763963
+        ]
+      },
+      "id": "node/9899847278"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899847302",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.1474805,
+          7.8798286
+        ]
+      },
+      "id": "node/9899847302"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899847310",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.1459765,
+          7.8818033
+        ]
+      },
+      "id": "node/9899847310"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899853842",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.9988514,
+          8.2805424
+        ]
+      },
+      "id": "node/9899853842"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899854182",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.1367545,
+          8.6770192
+        ]
+      },
+      "id": "node/9899854182"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899855320",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.0285286,
+          8.3054286
+        ]
+      },
+      "id": "node/9899855320"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899857548",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.2265948,
+          7.8440289
+        ]
+      },
+      "id": "node/9899857548"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899857569",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.220075,
+          7.8286008
+        ]
+      },
+      "id": "node/9899857569"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899857607",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.2220183,
+          7.8415305
+        ]
+      },
+      "id": "node/9899857607"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899857702",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.2242093,
+          7.8378435
+        ]
+      },
+      "id": "node/9899857702"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899857720",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.2246581,
+          7.8317001
+        ]
+      },
+      "id": "node/9899857720"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899858389",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.1220366,
+          7.7940859
+        ]
+      },
+      "id": "node/9899858389"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899858415",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.121505,
+          7.7918087
+        ]
+      },
+      "id": "node/9899858415"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899859134",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.2071007,
+          7.7729157
+        ]
+      },
+      "id": "node/9899859134"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899861329",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.0992283,
+          7.7354588
+        ]
+      },
+      "id": "node/9899861329"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899861332",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.1013866,
+          7.7325383
+        ]
+      },
+      "id": "node/9899861332"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899861840",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.1615884,
+          8.7961808
+        ]
+      },
+      "id": "node/9899861840"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899868102",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.0390459,
+          8.6297437
+        ]
+      },
+      "id": "node/9899868102"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899881091",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.9643181,
+          8.0587314
+        ]
+      },
+      "id": "node/9899881091"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899882253",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.8733203,
+          8.5681801
+        ]
+      },
+      "id": "node/9899882253"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899887935",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.9186494,
+          8.5706225
+        ]
+      },
+      "id": "node/9899887935"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899889958",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.2995378,
+          8.7345033
+        ]
+      },
+      "id": "node/9899889958"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899902321",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.0396218,
+          8.6269565
+        ]
+      },
+      "id": "node/9899902321"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899911720",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.5376823,
+          8.4914371
+        ]
+      },
+      "id": "node/9899911720"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9899911743",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.5415988,
+          8.4892093
+        ]
+      },
+      "id": "node/9899911743"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/10115720864",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.3347274,
+          7.6942166
+        ]
+      },
+      "id": "node/10115720864"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/10115725719",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.2348569,
+          8.3311678
+        ]
+      },
+      "id": "node/10115725719"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/10115726496",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.0088761,
+          8.4757647
+        ]
+      },
+      "id": "node/10115726496"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/10115726942",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.6609504,
+          8.5149695
+        ]
+      },
+      "id": "node/10115726942"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/10115727924",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.2505468,
+          8.3444813
+        ]
+      },
+      "id": "node/10115727924"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/10115727981",
+        "amenity": "school",
+        "source": "nigeriase4all.gov.ng",
+        "source:date": "2022"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.25047,
+          8.3406213
+        ]
+      },
+      "id": "node/10115727981"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/11907283522",
+        "addr:city": "ibadan",
+        "addr:postcode": "20022",
+        "addr:street": "Alelgongo, Ibadan",
+        "amenity": "school",
+        "name": "Alegongo Secondary School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9507473,
+          7.4390613
+        ]
+      },
+      "id": "node/11907283522"
+    }
+  ]
+},
+        'Colleges':{
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2024-09-25T09:23:28Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/2639220714",
+        "amenity": "college",
+        "name": "School of Hygiene"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.8674361,
+          7.4113026
+        ]
+      },
+      "id": "node/2639220714"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/2639220715",
+        "amenity": "college",
+        "name": "Fedeal Cooperative College"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.8707191,
+          7.4120899
+        ]
+      },
+      "id": "node/2639220715"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/2639256385",
+        "addr:city": "Idi-ishin, Ibadan",
+        "amenity": "college",
+        "name": "NIHORT"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.8477209,
+          7.4067946
+        ]
+      },
+      "id": "node/2639256385"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6773178298",
+        "amenity": "college",
+        "name": "LAUTECH Medical College"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2584741,
+          8.1598278
+        ]
+      },
+      "id": "node/6773178298"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6773279270",
+        "amenity": "college",
+        "name": "Ori Oke Community High Schools"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2422018,
+          8.1473958
+        ]
+      },
+      "id": "node/6773279270"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6783464861",
+        "amenity": "college",
+        "name": "Anglican Grammar School 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2433236,
+          8.1454222
+        ]
+      },
+      "id": "node/6783464861"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6783473668",
+        "amenity": "college",
+        "name": "Federal Government College, Ogbomoso"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.229205,
+          8.1544736
+        ]
+      },
+      "id": "node/6783473668"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/6786096372",
+        "amenity": "college",
+        "name": "ADENIRAN MEMORIAL GRAMMAR SCHOOL"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2112475,
+          8.1358463
+        ]
+      },
+      "id": "node/6786096372"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/7956218501",
+        "amenity": "college",
+        "name": "Ladoke Akintola University of Technology (LAUTECH)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2670422,
+          8.1673148
+        ]
+      },
+      "id": "node/7956218501"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/7956231996",
+        "amenity": "college",
+        "name": "Ladoke Akintola University of Technology (LAUTECH)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.2680408,
+          8.1667555
+        ]
+      },
+      "id": "node/7956231996"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/9583603587",
+        "amenity": "college",
+        "name": "Mufutau Lanihun College"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9423645,
+          7.3944075
+        ]
+      },
+      "id": "node/9583603587"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/11904341827",
+        "addr:city": "Ibadan",
+        "addr:postcode": "200222",
+        "addr:street": "Genral Gas road Akobo",
+        "amenity": "college",
+        "name": "Isabatudeen Girls Grammar School",
+        "operator": "Edcation",
+        "operator:type": "government"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.9406187,
+          7.4222499
+        ]
+      },
+      "id": "node/11904341827"
+    },
+  ]
+},
+           'Universities': {
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2024-09-25T03:29:52Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "relation/10476332",
+        "amenity": "university",
+        "name": "University of Ibadan",
+        "type": "multipolygon"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              3.8844608,
+              7.4628674
             ],
-            'fill-opacity': 0.8 // Opacity of the LGA boundaries
+            [
+              3.8880251,
+              7.4555177
+            ],
+            [
+              3.8914887,
+              7.4571526
+            ],
+            [
+              3.8942295,
+              7.4581827
+            ],
+            [
+              3.8972849,
+              7.4599327
+            ],
+            [
+              3.8973322,
+              7.4599552
+            ],
+            [
+              3.8965244,
+              7.461621
+            ],
+            [
+              3.8959825,
+              7.4627383
+            ],
+            [
+              3.8940138,
+              7.4617996
+            ],
+            [
+              3.8936204,
+              7.4626108
+            ],
+            [
+              3.8949147,
+              7.4632279
+            ],
+            [
+              3.8952552,
+              7.4633903
+            ],
+            [
+              3.8957897,
+              7.4636451
+            ],
+            [
+              3.8946691,
+              7.4659557
+            ],
+            [
+              3.8937073,
+              7.4679389
+            ],
+            [
+              3.8915467,
+              7.4669088
+            ],
+            [
+              3.8910037,
+              7.4666321
+            ],
+            [
+              3.8909135,
+              7.4664547
+            ],
+            [
+              3.8903256,
+              7.4663153
+            ],
+            [
+              3.8874286,
+              7.4642824
+            ],
+            [
+              3.8844608,
+              7.4628674
+            ]
+          ]
+        ]
+      },
+      "id": "relation/10476332"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/432922503",
+        "amenity": "university",
+        "name": "Ladoke Akintola University of Technology Teaching Hospital"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              4.2513943,
+              8.1516581
+            ],
+            [
+              4.2526668,
+              8.150429
+            ],
+            [
+              4.2531844,
+              8.1513501
+            ],
+            [
+              4.2531166,
+              8.1513775
+            ],
+            [
+              4.2531382,
+              8.1516703
+            ],
+            [
+              4.2533847,
+              8.1516947
+            ],
+            [
+              4.2539454,
+              8.1527927
+            ],
+            [
+              4.2525161,
+              8.154066
+            ],
+            [
+              4.2513943,
+              8.1516581
+            ]
+          ]
+        ]
+      },
+      "id": "way/432922503"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/796975209",
+        "amenity": "university",
+        "name": "Lead City University Jericho Campus"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              3.866121,
+              7.4010628
+            ],
+            [
+              3.8659058,
+              7.4002113
+            ],
+            [
+              3.8660948,
+              7.4001643
+            ],
+            [
+              3.8662881,
+              7.4001163
+            ],
+            [
+              3.8664075,
+              7.4000866
+            ],
+            [
+              3.8663559,
+              7.3998822
+            ],
+            [
+              3.8663115,
+              7.3997067
+            ],
+            [
+              3.8662768,
+              7.3995691
+            ],
+            [
+              3.8662043,
+              7.3992823
+            ],
+            [
+              3.8666887,
+              7.399162
+            ],
+            [
+              3.8668546,
+              7.3998185
+            ],
+            [
+              3.8668673,
+              7.3998689
+            ],
+            [
+              3.8668969,
+              7.3998616
+            ],
+            [
+              3.8669131,
+              7.3999257
+            ],
+            [
+              3.8669344,
+              7.4000101
+            ],
+            [
+              3.8669713,
+              7.4001559
+            ],
+            [
+              3.8665545,
+              7.4002594
+            ],
+            [
+              3.8665954,
+              7.4004213
+            ],
+            [
+              3.8666725,
+              7.4007261
+            ],
+            [
+              3.8667199,
+              7.400914
+            ],
+            [
+              3.866121,
+              7.4010628
+            ]
+          ]
+        ]
+      },
+      "id": "way/796975209"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/928892256",
+        "amenity": "university",
+        "name": "Ajayi Crowther University",
+        "website": "https://acu.edu.ng/",
+        "wikidata": "Q4699675",
+        "wikipedia": "en:Ajayi Crowther University"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              3.9512071,
+              7.8471566
+            ],
+            [
+              3.9502931,
+              7.8523126
+            ],
+            [
+              3.9474969,
+              7.8518237
+            ],
+            [
+              3.9468893,
+              7.8517387
+            ],
+            [
+              3.9462496,
+              7.8515727
+            ],
+            [
+              3.9456676,
+              7.8514464
+            ],
+            [
+              3.9449763,
+              7.850838
+            ],
+            [
+              3.9452639,
+              7.8494164
+            ],
+            [
+              3.9459264,
+              7.8496184
+            ],
+            [
+              3.9463328,
+              7.8479962
+            ],
+            [
+              3.946428,
+              7.8480168
+            ],
+            [
+              3.9464542,
+              7.8479949
+            ],
+            [
+              3.9462067,
+              7.8472801
+            ],
+            [
+              3.948614,
+              7.8460127
+            ],
+            [
+              3.9495583,
+              7.8454792
+            ],
+            [
+              3.9498939,
+              7.8458395
+            ],
+            [
+              3.9501612,
+              7.8455663
+            ],
+            [
+              3.9505157,
+              7.8458812
+            ],
+            [
+              3.9505143,
+              7.8459184
+            ],
+            [
+              3.9502287,
+              7.8462133
+            ],
+            [
+              3.9508201,
+              7.8468112
+            ],
+            [
+              3.9512071,
+              7.8471566
+            ]
+          ]
+        ]
+      },
+      "id": "way/928892256"
+    }
+  ]
+}
+}
+        // Filter to get only LGA boundaries
+        const lgaBoundaries = {
+            "type": "FeatureCollection",
+            "features": lgaBoundariesGeoJSON.features.filter(feature =>
+                feature.properties.admin_level === "6" &&
+                feature.properties.boundary === "administrative" &&
+                feature.properties.type === "boundary" &&
+                feature.geometry.type === "Polygon"
+            )
+        };
+            const colorMapping = {
+                "Saki West": "#4fa650",
+                "Atisbo": "#33FF57",
+                "Iwajowa": "#3357FF",
+                "Ibarapa North": "#FF33A1",
+                "Ibarapa Central": "#FF8C33",
+                "Ibarapa East": "#33FFF6",
+                "Oluyole": "#F5FF33",
+                "Ido": "#8C33FF",
+                "Ona Ara": "#FF3333",
+                "Egbeda": "#fb06c0",
+                "Lagelu": "#3333FF",
+                "Akinyele": "#1576f3",
+                "Ibadan North": "#FF9933",
+                "Ibadan South East": "#33FF8C",
+                "Ibadan South West": "#FF33A6",
+                "Ibadan North East": "#A6FF33",
+                "Ibadan North West": "#33A6FF",
+                "Surulere": "#A633FF",
+                "Ori Ire": "#FFCC33",
+                "Saki East": "#FF5733",
+                "Olorunsogo": "#ce28dc",
+                "Irepo": "#3357FF",
+                "Ogo Oluwa": "#188a82",
+                "Afijio": "#FFB733",
+                "Kajola": "#33FFD6",
+                "Iseyin": "#FFD633",
+                "Itesiwaju": "#d6ee13",
+                "Ìsẹ́yìn": "#CD5C5C",
+                "Orelope": "#3380FF",
+                "Atiba": "#393a33",
+                "Ogbomosho South": "#FF7F33",
+                "Ogbomosho North": "#33FF4D",
+                "Oyo West": "#e79cf5",
+                "Oyo East": "#28cedc"
+            };
+
+        // Infrastructure color mapping
+        const infrastructureColorMapping = {
+            'Schools': '#FF0000', // Red
+            'Colleges': '#0000FF', // Blue
+            'Universities': '#00FF00' // Green
+        };
+
+
+    function addLGABoundaries(geojson) {
+        map.addSource('lga-boundaries', {
+            'type': 'geojson',
+            'data': geojson
+        });
+
+        Object.keys(colorMapping).forEach(lgaName => {
+            const layerId = 'lga-' + lgaName;
+            map.addLayer({
+                'id': layerId,
+                'type': 'fill',
+                'source': 'lga-boundaries',
+                'filter': ['==', ['get', 'name'], lgaName],
+                'paint': {
+                    'fill-color': colorMapping[lgaName],
+                    'fill-opacity': 0.6
+                }
+            });
+        });
+    }
+
+    function addInfrastructureLayer(type, geojson) {
+    map.addSource(type, {
+        'type': 'geojson',
+        'data': geojson
+    });
+
+    map.addLayer({
+        'id': type + '-points',
+        'type': 'circle',
+        'source': type,
+        'layout': {},
+        'paint': {
+            'circle-color': infrastructureColorMapping[type],
+            'circle-radius': 5,
+            'circle-opacity': 1
         }
     });
 
-    // Add a line layer to emphasize the boundary
-    map.addLayer({
-        'id': 'lga-boundaries-line',
-        'type': 'line',
-        'source': 'lga-boundaries',
-        'layout': {},
-        'paint': {
-            'line-color': '#000000', // Color of the boundary line
-            'line-width': 2
+    // Click event for infrastructure points
+    map.on('click', type + '-points', function (e) {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.name || e.features[0].properties.amenity || 'No Description Available'; // Update fallback logic
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
+        new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(map);
+    });
+
+    // Hover event for infrastructure points
+    map.on('mouseenter', type + '-points', function (e) {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.name || e.features[0].properties.amenity || 'No Description Available'; // Update fallback logic
+        const popup = new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(map);
+
+        // Change the cursor style
+        map.getCanvas().style.cursor = 'pointer';
+
+        // Remove popup on mouse leave
+        map.on('mouseleave', type + '-points', function () {
+            popup.remove();
+            map.getCanvas().style.cursor = ''; // Reset cursor
+        });
+    });
+}
+
+    function addLegend() {
+        const legend = document.getElementById('legend');
+        legend.innerHTML = '<h4>Legend</h4>';
+        Object.keys(infrastructureColorMapping).forEach(type => {
+            const color = infrastructureColorMapping[type];
+            const count = educationInfrastructureData[type].features.length; // Count the number of features for each type
+            const item = document.createElement('div');
+            item.innerHTML = `<span style="background-color: ${color}"></span>${type}: ${count}`; // Display count next to type
+            legend.appendChild(item);
+        });
+    }
+
+    map.on('load', function () {
+        addLGABoundaries(lgaBoundariesGeoJSON);
+        Object.keys(educationInfrastructureData).forEach(type => {
+            addInfrastructureLayer(type, educationInfrastructureData[type]);
+        });
+        addLegend();
     });
 
     let lastClickedLGA = null; // Store the last clicked LGA
     let currentPopup = null; // Store the current popup
-    
-    function addLegend() {
-    const legend = document.getElementById('legend');
-    legend.innerHTML = '<h4>Legend</h4>';  // Clear the legend and add a header
 
-    // Iterate over the colorMapping object
-    Object.keys(colorMapping).forEach(lgaName => {
-        const color = colorMapping[lgaName];
-
-        // Create a container for each legend item
-        const item = document.createElement('div');
-        item.style.display = 'flex';
-        item.style.alignItems = 'center';
-        item.style.marginBottom = '5px';
-
-        // Create a colored circle representing the LGA color
-        const colorBox = document.createElement('span');
-        colorBox.style.backgroundColor = color;
-        colorBox.style.height = '12px';
-        colorBox.style.width = '12px';
-        colorBox.style.borderRadius = '50%';
-        colorBox.style.marginRight = '5px';
-
-        // Create a label with the LGA name
-        const label = document.createElement('span');
-        label.textContent = lgaName;
-
-        // Append the color box and label to the item
-        item.appendChild(colorBox);
-        item.appendChild(label);
-
-        // Append the item to the legend
-        legend.appendChild(item);
-    });
-}
-
-
-    map.on('load', function () {
-        addSource(geojsonData);
-        Object.keys(geojsonData).forEach(type => {
-            addInfrastructureLayer(type, geojsonData[type]);
-        });
-        addLegend();
-    });
-    // Add click functionality for each LGA
     Object.keys(colorMapping).forEach(lgaName => {
         const layerId = 'lga-' + lgaName;
 
-        // Click event for each LGA
         map.on('click', layerId, function (e) {
             const coordinates = e.lngLat;
             const currentLGAName = e.features[0].properties.name;
             const source = e.features[0].properties.source;
 
-            // If there was a previously clicked LGA, reset its color
+            // Reset the last clicked LGA to default state
             if (lastClickedLGA) {
-                map.setPaintProperty('lga-' + lastClickedLGA, 'fill-color', colorMapping[lastClickedLGA]);
+                const previousLayerId = 'lga-' + lastClickedLGA;
+                map.setPaintProperty(previousLayerId, 'fill-opacity', 0.8); // Reset opacity
+                map.flyTo({
+                    center: [3.93125, 7.85257], // Default center coordinates
+                    zoom: 7.2, // Default zoom level
+                    essential: true
+                });
             }
 
-            // Blink the clicked LGA red twice
+            // Blink the clicked LGA red twice and make it transparent
             const blinkRed = (lgaName) => {
                 map.setPaintProperty(layerId, 'fill-color', 'rgba(255, 0, 0, 1)'); // Blink red
                 setTimeout(() => {
                     map.setPaintProperty(layerId, 'fill-color', colorMapping[lgaName]); // Revert color
-                }, 300); // First blink delay
-
+                }, 300);
                 setTimeout(() => {
                     map.setPaintProperty(layerId, 'fill-color', 'rgba(255, 0, 0, 1)'); // Blink red again
-                }, 600); // Second blink delay
-
+                }, 600);
                 setTimeout(() => {
-                    map.setPaintProperty(layerId, 'fill-color', 'rgba(0, 0, 0, 0'); // Make transparent
-                }, 900); // Transparent after blinking
+                    map.setPaintProperty(layerId, 'fill-color', 'rgba(0, 0, 0, 0)'); // Transparent
+                    map.setPaintProperty(layerId, 'fill-opacity', 0.1); // Lower opacity
+                }, 900);
 
-                // Show the popup after making it transparent
                 setTimeout(() => {
                     if (currentPopup) {
                         currentPopup.remove(); // Remove any existing popup
@@ -47815,48 +50341,57 @@
 
             blinkRed(currentLGAName); // Trigger the blinking effect
 
-            // Update the last clicked LGA
-            lastClickedLGA = currentLGAName;
-        });
-    });
+            // Zoom into the clicked LGA
+            map.flyTo({
+                center: coordinates,
+                zoom: 11, // Adjust the zoom level as needed
+                essential: true // This animation is considered essential with respect to prefers-reduced-motion
+            });
 
-    // Add hover functionality for each LGA
-    Object.keys(colorMapping).forEach(lgaName => {
-        const layerId = 'lga-' + lgaName;
-
-        // Create a layer for each LGA for hover
-        map.addLayer({
-            'id': layerId,
-            'type': 'fill',
-            'source': 'lga-boundaries',
-            'filter': ['==', ['get', 'name'], lgaName],
-            'paint': {
-                'fill-color': colorMapping[lgaName],
-                'fill-opacity': 0.8
-            }
+            lastClickedLGA = currentLGAName; // Update the last clicked LGA
         });
 
         // Hover effect for individual LGA
-        map.on('mouseenter', layerId, function (e) {
+        map.on('mouseenter', layerId, function () {
             map.getCanvas().style.cursor = 'pointer';
-            map.setPaintProperty(layerId, 'fill-opacity', 0.3); // Lower opacity on hover
+            map.setPaintProperty(layerId, 'fill-opacity', 0.8); // Lower opacity on hover
         });
 
         map.on('mouseleave', layerId, function () {
             map.getCanvas().style.cursor = ''; // Reset cursor
-            map.setPaintProperty(layerId, 'fill-opacity', 0.8); // Reset opacity
+            map.setPaintProperty(layerId, 'fill-opacity', 0.6); // Reset opacity
         });
     });
-});
+ 
+    function toggleLayer(layerId, visibility) {
+            map.setLayoutProperty(layerId, 'visibility', visibility);
+        }
 
+        // Event listeners for checkboxes
+        document.getElementById('schools').addEventListener('change', (e) => {
+            toggleLayer('Schools-points', e.target.checked ? 'visible' : 'none');
+        });
 
+        document.getElementById('colleges').addEventListener('change', (e) => {
+            toggleLayer('Colleges-points', e.target.checked ? 'visible' : 'none');
+        });
 
+        document.getElementById('universities').addEventListener('change', (e) => {
+            toggleLayer('Universities-points', e.target.checked ? 'visible' : 'none');
+        });
+
+        // Load map and add data
+        map.on('load', () => {
+            addLGABoundaries(lgaBoundariesGeoJSON);
+
+            Object.keys(educationInfrastructureData).forEach(type => {
+                addInfrastructureLayer(type, educationInfrastructureData[type]);
+            });
+
+            addLegend();
+        });
     </script>
-
-     <!-- Bootstrap JS, Popper.js, and jQuery -->
-     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/@turf/turf@^7/turf.min.js"></script>
 </body>
 
 </html>
